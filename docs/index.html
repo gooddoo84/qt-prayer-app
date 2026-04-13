@@ -8,7 +8,7 @@
 <title>QT 7분법 기도</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,system-ui,sans-serif;background:#0a0a0a;color:#e4e4e7;min-height:100dvh;-webkit-user-select:none;user-select:none}
+body{font-family:-apple-system,system-ui,sans-serif;background:#f8f8f8;color:#1a1a1a;min-height:100dvh;-webkit-user-select:none;user-select:none}
 textarea{-webkit-user-select:text;user-select:text}
 .container{max-width:440px;margin:0 auto;padding:20px;min-height:100dvh;display:flex;flex-direction:column}
 .page{display:none;flex:1;flex-direction:column}
@@ -17,36 +17,36 @@ textarea{-webkit-user-select:text;user-select:text}
 /* Home */
 .home-icon{font-size:48px;text-align:center;margin:40px 0 16px}
 h1{font-size:22px;text-align:center;font-weight:700}
-.subtitle{text-align:center;color:#71717a;font-size:13px;margin-top:4px}
-.card{background:#18181b;border:1px solid #27272a;border-radius:16px;padding:20px;margin:24px 0}
-.card-label{font-size:11px;color:#71717a;text-transform:uppercase;letter-spacing:1px}
+.subtitle{text-align:center;color:#6b7280;font-size:13px;margin-top:4px}
+.card{background:#ffffff;border:1px solid #e4e4e7;border-radius:16px;padding:20px;margin:24px 0}
+.card-label{font-size:11px;color:#6b7280;text-transform:uppercase;letter-spacing:1px}
 .card-title{font-size:22px;font-weight:700;margin:6px 0 4px}
-.card-sub{font-size:13px;color:#71717a}
-.progress-bar{width:100%;height:5px;background:#27272a;border-radius:4px;margin-top:12px;overflow:hidden}
-.progress-fill{height:100%;background:#7c3aed;border-radius:4px;transition:width .3s}
-.progress-label{display:flex;justify-content:space-between;font-size:11px;color:#71717a;margin-top:6px}
-.btn-primary{display:block;width:100%;padding:16px;background:#7c3aed;color:#fff;border:none;border-radius:12px;font-size:17px;font-weight:600;cursor:pointer;margin-top:16px;text-align:center}
-.btn-primary:active{background:#6d28d9}
-.btn-secondary{display:block;width:100%;padding:14px;background:#27272a;color:#d4d4d8;border:none;border-radius:12px;font-size:15px;cursor:pointer;margin-top:12px;text-align:center}
+.card-sub{font-size:13px;color:#6b7280}
+.progress-bar{width:100%;height:5px;background:#e4e4e7;border-radius:4px;margin-top:12px;overflow:hidden}
+.progress-fill{height:100%;background:#6d28d9;border-radius:4px;transition:width .3s}
+.progress-label{display:flex;justify-content:space-between;font-size:11px;color:#6b7280;margin-top:6px}
+.btn-primary{display:block;width:100%;padding:16px;background:#6d28d9;color:#fff;border:none;border-radius:12px;font-size:17px;font-weight:600;cursor:pointer;margin-top:16px;text-align:center}
+.btn-primary:active{background:#5b21b6}
+.btn-secondary{display:block;width:100%;padding:14px;background:#e4e4e7;color:#374151;border:none;border-radius:12px;font-size:15px;cursor:pointer;margin-top:12px;text-align:center}
 .btn-complete{background:#059669}
 .btn-complete:active{background:#047857}
 .streak{text-align:center;color:#a78bfa;font-size:13px;margin:8px 0}
 .done-check{text-align:center;margin:20px 0}
 .done-check .big{font-size:40px}
-.done-check p{color:#71717a;font-size:13px;margin:8px 0}
+.done-check p{color:#6b7280;font-size:13px;margin:8px 0}
 
 /* Prayer */
-.topbar{display:flex;justify-content:space-between;align-items:center;padding:8px 0;font-size:13px;color:#71717a}
-.topbar a{color:#71717a;text-decoration:none}
+.topbar{display:flex;justify-content:space-between;align-items:center;padding:8px 0;font-size:13px;color:#6b7280}
+.topbar a{color:#6b7280;text-decoration:none}
 .step-icon{font-size:40px;text-align:center;margin:24px 0 12px}
 .step-title{font-size:20px;font-weight:700;text-align:center}
 .step-subtitle{text-align:center;color:#a78bfa;font-size:12px;margin-top:4px}
-.guide-box{background:#18181b;border:1px solid #27272a;border-radius:12px;padding:16px;margin:20px 0;font-size:14px;color:#a1a1aa;line-height:1.7}
-.bible-box{background:#18181b;border:1px solid #27272a;border-radius:12px;padding:16px;margin:16px 0;font-size:13px;color:#d4d4d8;line-height:1.8;max-height:280px;overflow-y:auto}
-.summary-box{background:rgba(124,58,237,0.1);border:1px solid rgba(124,58,237,0.3);border-radius:12px;padding:14px;margin:12px 0}
+.guide-box{background:#ffffff;border:1px solid #e4e4e7;border-radius:12px;padding:16px;margin:20px 0;font-size:14px;color:#4b5563;line-height:1.7}
+.bible-box{background:#ffffff;border:1px solid #e4e4e7;border-radius:12px;padding:16px;margin:16px 0;font-size:13px;color:#374151;line-height:1.8;max-height:280px;overflow-y:auto}
+.summary-box{background:rgba(124,58,237,0.08);border:1px solid rgba(124,58,237,0.2);border-radius:12px;padding:14px;margin:12px 0}
 .summary-box .label{font-size:12px;color:#a78bfa;margin-bottom:6px;display:flex;align-items:center;gap:6px}
-.summary-box p{font-size:13px;color:#d4d4d8;line-height:1.6}
-.memo{width:100%;background:#18181b;border:1px solid #27272a;border-radius:12px;padding:14px;color:#e4e4e7;font-size:14px;resize:none;outline:none;min-height:90px;font-family:inherit;line-height:1.6}
+.summary-box p{font-size:13px;color:#374151;line-height:1.6}
+.memo{width:100%;background:#ffffff;border:1px solid #e4e4e7;border-radius:12px;padding:14px;color:#1f2937;font-size:14px;resize:none;outline:none;min-height:90px;font-family:inherit;line-height:1.6}
 .memo:focus{border-color:#7c3aed}
 .nav-buttons{display:flex;gap:10px;padding:16px 0;margin-top:auto;padding-bottom:max(16px,env(safe-area-inset-bottom))}
 .nav-buttons button{flex:1}
@@ -54,13 +54,13 @@ h1{font-size:22px;text-align:center;font-weight:700}
 /* Complete */
 .complete-icon{font-size:56px;text-align:center;margin:40px 0 16px}
 .complete-title{font-size:22px;font-weight:700;text-align:center}
-.complete-body{text-align:center;color:#a1a1aa;font-size:13px;line-height:1.7;margin:12px 20px 0;max-width:300px;margin-left:auto;margin-right:auto}
+.complete-body{text-align:center;color:#4b5563;font-size:13px;line-height:1.7;margin:12px 20px 0;max-width:300px;margin-left:auto;margin-right:auto}
 .stats{display:grid;grid-template-columns:1fr 1fr;gap:12px;text-align:center;margin:20px 0}
 .stat-num{font-size:24px;font-weight:700}
 .stat-num.purple{color:#a78bfa}
 .stat-num.green{color:#34d399}
-.stat-label{font-size:11px;color:#71717a;margin-top:4px}
-.footer{text-align:center;color:#3f3f46;font-size:11px;margin-top:24px}
+.stat-label{font-size:11px;color:#6b7280;margin-top:4px}
+.footer{text-align:center;color:#9ca3af;font-size:11px;margin-top:24px}
 </style>
 </head>
 <body>
@@ -203,11 +203,20 @@ function startPrayer(){
 }
 
 async function fetchBible(){
-  try{
-    const r=await fetch('https://bible-api.com/'+chapter.en+'+'+chapter.ch+'?translation=kr');
-    if(r.ok){const d=await r.json();bibleText=d.text||'';}
-    else bibleText='';
-  }catch{bibleText='';}
+  // Try multiple APIs for Korean Bible
+  const apis=[
+    // API 1: bible-api.com (Korean)
+    async()=>{const r=await fetch('https://bible-api.com/'+chapter.en+'+'+chapter.ch+'?translation=kr');if(r.ok){const d=await r.json();return d.text||'';}return null;},
+    // API 2: getbible.net (Korean)
+    async()=>{const r=await fetch('https://getbible.net/json?passage='+chapter.en+'+'+chapter.ch+'&version=korean');if(r.ok){const t=await r.text();const d=JSON.parse(t.replace(/^;$/,''));const ch=d[Object.keys(d)[0]].chapter;return Object.values(ch).map(v=>v.verse_nr+'. '+v.verse).join('\n');}return null;},
+    // API 3: bible.helloao.org (Korean)
+    async()=>{const bookMap={matt:'MAT',mark:'MRK',luke:'LUK',john:'JHN',acts:'ACT',rom:'ROM','1cor':'1CO','2cor':'2CO',gal:'GAL',eph:'EPH',phil:'PHP',col:'COL','1thess':'1TH','2thess':'2TH','1tim':'1TI','2tim':'2TI',titus:'TIT',phlm:'PHM',heb:'HEB',jas:'JAS','1pet':'1PE','2pet':'2PE','1john':'1JN','2john':'2JN','3john':'3JN',jude:'JUD',rev:'REV',gen:'GEN',exod:'EXO',lev:'LEV',num:'NUM',deut:'DEU',josh:'JOS',judg:'JDG',ruth:'RUT','1sam':'1SA','2sam':'2SA','1kgs':'1KI','2kgs':'2KI','1chr':'1CH','2chr':'2CH',ezra:'EZR',neh:'NEH',esth:'EST',job:'JOB',ps:'PSA',prov:'PRO',eccl:'ECC',song:'SNG',isa:'ISA',jer:'JER',lam:'LAM',ezek:'EZK',dan:'DAN',hos:'HOS',joel:'JOL',amos:'AMO',obad:'OBA',jonah:'JON',mic:'MIC',nah:'NAM',hab:'HAB',zeph:'ZEP',hag:'HAG',zech:'ZEC',mal:'MAL'};const code=bookMap[chapter.en]||chapter.en.toUpperCase();const r=await fetch('https://bible.helloao.org/api/KRV/'+code+'/'+chapter.ch+'.json');if(r.ok){const d=await r.json();if(d.chapter&&d.chapter.content){return d.chapter.content.filter(c=>c.type==='verse').map(v=>v.number+'. '+v.content).join('\n');}return d.text||'';}return null;},
+  ];
+  bibleText='';
+  for(const api of apis){
+    try{const result=await api();if(result){bibleText=result;break;}}catch{}
+  }
+  if(!bibleText)bibleText=chapter.ko+' '+chapter.ch+'장의 말씀을 묵상하세요.\n\n성경책을 펴고 읽어주세요.';
   if(currentStep===0)renderStep();
 }
 
