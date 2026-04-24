@@ -831,7 +831,7 @@ function goHome(){
     for(let i=0;i<25;i++){
       const s=document.createElement('div');
       const size=Math.random()*3+1;
-      s.style.cssText='position:absolute;border-radius:50%;background:rgba(218,165,32,'+(Math.random()*0.4+0.2)+');width:'+size+'px;height:'+size+'px;left:'+Math.random()*100+'%;top:-5%;animation:starFall '+(Math.random()*6+4)+'s linear '+(Math.random()*8)+'s infinite;';
+      s.style.cssText='position:absolute;border-radius:50%;background:rgba(255,223,120,'+(Math.random()*0.5+0.4)+');width:'+size+'px;height:'+size+'px;left:'+Math.random()*100+'%;top:-5%;box-shadow:0 0 '+(size*3)+'px '+(size*1.5)+'px rgba(255,215,0,'+(Math.random()*0.3+0.2)+'),0 0 '+(size*6)+'px '+(size*2)+'px rgba(255,200,50,0.1);animation:starFall '+(Math.random()*6+4)+'s linear '+(Math.random()*8)+'s infinite;';
       sc.appendChild(s);
     }
   }
