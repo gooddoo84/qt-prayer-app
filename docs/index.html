@@ -10,60 +10,382 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>QT 7분법 기도</title>
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700&display=swap');
+
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,system-ui,sans-serif;background:#f8f8f8;color:#1a1a1a;min-height:100dvh;-webkit-user-select:none;user-select:none}
+body{
+  font-family:-apple-system,'Segoe UI',system-ui,'Helvetica Neue',sans-serif;
+  background:linear-gradient(160deg,#faf7f2 0%,#f5f0e8 40%,#f3ece0 100%);
+  color:#2d2a24;
+  min-height:100dvh;
+  -webkit-user-select:none;user-select:none;
+  overflow-x:hidden;
+}
 textarea{-webkit-user-select:text;user-select:text}
-.container{max-width:440px;margin:0 auto;padding:20px;min-height:100dvh;display:flex;flex-direction:column}
-.page{display:none;flex:1;flex-direction:column}
-.page.active{display:flex}
 
-/* Home */
-.home-icon{font-size:48px;text-align:center;margin:40px 0 16px}
-h1{font-size:22px;text-align:center;font-weight:700}
-.subtitle{text-align:center;color:#6b7280;font-size:13px;margin-top:4px}
-.card{background:#ffffff;border:1px solid #e4e4e7;border-radius:16px;padding:20px;margin:24px 0}
-.card-label{font-size:11px;color:#6b7280;text-transform:uppercase;letter-spacing:1px}
-.card-title{font-size:22px;font-weight:700;margin:6px 0 4px}
-.card-sub{font-size:13px;color:#6b7280}
-.progress-bar{width:100%;height:5px;background:#e4e4e7;border-radius:4px;margin-top:12px;overflow:hidden}
-.progress-fill{height:100%;background:#6d28d9;border-radius:4px;transition:width .3s}
-.progress-label{display:flex;justify-content:space-between;font-size:11px;color:#6b7280;margin-top:6px}
-.btn-primary{display:block;width:100%;padding:16px;background:#6d28d9;color:#fff;border:none;border-radius:12px;font-size:17px;font-weight:600;cursor:pointer;margin-top:16px;text-align:center}
-.btn-primary:active{background:#5b21b6}
-.btn-secondary{display:block;width:100%;padding:14px;background:#e4e4e7;color:#374151;border:none;border-radius:12px;font-size:15px;cursor:pointer;margin-top:12px;text-align:center}
-.btn-complete{background:#059669}
-.btn-complete:active{background:#047857}
-.streak{text-align:center;color:#a78bfa;font-size:13px;margin:8px 0}
-.done-check{text-align:center;margin:20px 0}
-.done-check .big{font-size:40px}
-.done-check p{color:#6b7280;font-size:13px;margin:8px 0}
+/* Floating decorative elements */
+body::before, body::after {
+  content:'✦';
+  position:fixed;
+  font-size:120px;
+  opacity:.03;
+  pointer-events:none;
+  z-index:0;
+  color:#b8860b;
+}
+body::before { top:-20px; right:-30px; animation: floatDeco 12s ease-in-out infinite; }
+body::after { bottom:60px; left:-40px; animation: floatDeco 15s ease-in-out infinite reverse; }
 
-/* Prayer */
-.topbar{display:flex;justify-content:space-between;align-items:center;padding:8px 0;font-size:13px;color:#6b7280}
-.topbar a{color:#6b7280;text-decoration:none}
-.step-icon{font-size:40px;text-align:center;margin:24px 0 12px}
-.step-title{font-size:20px;font-weight:700;text-align:center}
-.step-subtitle{text-align:center;color:#a78bfa;font-size:12px;margin-top:4px}
-.guide-box{background:#ffffff;border:1px solid #e4e4e7;border-radius:12px;padding:16px;margin:20px 0;font-size:14px;color:#4b5563;line-height:1.7}
-.bible-box{background:#ffffff;border:1px solid #e4e4e7;border-radius:12px;padding:16px;margin:16px 0;font-size:13px;color:#374151;line-height:1.8;max-height:280px;overflow-y:auto}
-.summary-box{background:rgba(124,58,237,0.08);border:1px solid rgba(124,58,237,0.2);border-radius:12px;padding:14px;margin:12px 0}
-.summary-box .label{font-size:12px;color:#a78bfa;margin-bottom:6px;display:flex;align-items:center;gap:6px}
-.summary-box p{font-size:13px;color:#374151;line-height:1.6}
-.memo{width:100%;background:#ffffff;border:1px solid #e4e4e7;border-radius:12px;padding:14px;color:#1f2937;font-size:14px;resize:none;outline:none;min-height:90px;font-family:inherit;line-height:1.6}
-.memo:focus{border-color:#7c3aed}
-.nav-buttons{display:flex;gap:10px;padding:16px 0;margin-top:auto;padding-bottom:max(16px,env(safe-area-inset-bottom))}
-.nav-buttons button{flex:1}
+@keyframes floatDeco {
+  0%,100%{transform:translateY(0) rotate(0deg)}
+  50%{transform:translateY(-20px) rotate(8deg)}
+}
 
-/* Complete */
-.complete-icon{font-size:56px;text-align:center;margin:40px 0 16px}
-.complete-title{font-size:22px;font-weight:700;text-align:center}
-.complete-body{text-align:center;color:#4b5563;font-size:13px;line-height:1.7;margin:12px 20px 0;max-width:300px;margin-left:auto;margin-right:auto}
-.stats{display:grid;grid-template-columns:1fr 1fr;gap:12px;text-align:center;margin:20px 0}
-.stat-num{font-size:24px;font-weight:700}
-.stat-num.purple{color:#a78bfa}
-.stat-num.green{color:#34d399}
-.stat-label{font-size:11px;color:#6b7280;margin-top:4px}
-.footer{text-align:center;color:#9ca3af;font-size:11px;margin-top:24px}
+/* === Container === */
+.container{
+  max-width:440px;margin:0 auto;padding:16px 20px;
+  min-height:100dvh;display:flex;flex-direction:column;
+  position:relative;z-index:1;
+}
+.page{display:none;flex:1;flex-direction:column;opacity:0;transform:translateY(18px)}
+.page.active{display:flex;animation:pageIn .5s cubic-bezier(.22,1,.36,1) forwards}
+
+@keyframes pageIn{
+  from{opacity:0;transform:translateY(18px)}
+  to{opacity:1;transform:translateY(0)}
+}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+@keyframes shimmer{0%{background-position:-200% center}100%{background-position:200% center}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@keyframes bounceIn{
+  0%{opacity:0;transform:scale(.3)}
+  50%{transform:scale(1.08)}
+  70%{transform:scale(.95)}
+  100%{opacity:1;transform:scale(1)}
+}
+@keyframes fadeInLine{
+  from{opacity:0;transform:translateY(6px)}
+  to{opacity:1;transform:translateY(0)}
+}
+@keyframes goldGlow{
+  0%,100%{box-shadow:0 0 0 3px rgba(184,134,11,.12),0 2px 12px rgba(0,0,0,.04)}
+  50%{box-shadow:0 0 0 5px rgba(218,165,32,.18),0 2px 16px rgba(184,134,11,.08)}
+}
+@keyframes confettiFall{
+  0%{transform:translateY(-100%) rotate(0deg);opacity:1}
+  100%{transform:translateY(100vh) rotate(720deg);opacity:0}
+}
+@keyframes celebratePulse{
+  0%,100%{transform:scale(1)}
+  25%{transform:scale(1.1)}
+  50%{transform:scale(1.05)}
+  75%{transform:scale(1.08)}
+}
+
+/* === Home Page === */
+.home-icon{
+  font-size:56px;text-align:center;margin:48px 0 20px;
+  animation:float 3s ease-in-out infinite;
+  filter:drop-shadow(0 4px 12px rgba(184,134,11,.25));
+}
+h1{
+  font-family:'Noto Serif KR',Georgia,'Times New Roman',serif;
+  font-size:28px;text-align:center;font-weight:700;
+  color:#2d2a24;
+  letter-spacing:1px;
+}
+.subtitle{
+  text-align:center;color:#8b7759;
+  font-size:14px;margin-top:6px;letter-spacing:.5px;
+}
+
+/* Cards */
+.card{
+  background:#ffffff;
+  border:1px solid #e8dcc8;
+  border-radius:20px;padding:24px;margin:24px 0;
+  box-shadow:0 8px 32px rgba(139,119,89,.08),0 2px 8px rgba(139,119,89,.04);
+  position:relative;
+  overflow:hidden;
+  transition:transform .25s ease,box-shadow .25s ease;
+}
+.card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,#b8860b,#daa520,#b8860b);
+}
+.card:hover{
+  transform:translateY(-2px);
+  box-shadow:0 12px 40px rgba(139,119,89,.12),0 4px 12px rgba(139,119,89,.06);
+}
+.card-label{
+  font-size:11px;color:#b8860b;
+  text-transform:uppercase;letter-spacing:2px;font-weight:600;
+}
+.card-title{
+  font-family:'Noto Serif KR',Georgia,serif;
+  font-size:24px;font-weight:700;margin:8px 0 6px;color:#2d2a24;
+}
+.card-sub{font-size:13px;color:#8b7759}
+
+/* Progress bar */
+.progress-bar{
+  width:100%;height:6px;
+  background:#ede5d8;
+  border-radius:6px;margin-top:14px;overflow:hidden;
+}
+.progress-fill{
+  height:100%;border-radius:6px;
+  background:linear-gradient(90deg,#b8860b,#daa520,#b8860b);
+  background-size:200% auto;
+  animation:shimmer 3s linear infinite;
+  transition:width .5s cubic-bezier(.4,0,.2,1);
+}
+.progress-label{
+  display:flex;justify-content:space-between;
+  font-size:11px;color:#8b7759;margin-top:8px;
+}
+
+/* Buttons */
+.btn-primary{
+  display:block;width:100%;padding:17px;
+  background:linear-gradient(135deg,#daa520 0%,#b8860b 100%);
+  color:#ffffff;border:none;border-radius:14px;
+  font-size:17px;font-weight:700;cursor:pointer;
+  margin-top:16px;text-align:center;
+  box-shadow:0 4px 20px rgba(184,134,11,.3);
+  transition:all .25s cubic-bezier(.22,1,.36,1);
+  letter-spacing:.5px;
+  position:relative;
+  overflow:hidden;
+}
+.btn-primary::after{
+  content:'';position:absolute;top:0;left:-100%;
+  width:100%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.15),transparent);
+  transition:left .5s;
+}
+.btn-primary:hover{
+  transform:translateY(-2px);
+  box-shadow:0 8px 32px rgba(184,134,11,.4);
+}
+.btn-primary:hover::after{left:100%}
+.btn-primary:active{
+  transform:translateY(0) scale(.97);
+  background:linear-gradient(135deg,#b8860b 0%,#8b6914 100%);
+  box-shadow:0 2px 12px rgba(184,134,11,.3);
+}
+.btn-secondary{
+  display:block;width:100%;padding:15px;
+  background:#ffffff;
+  color:#4a4035;
+  border:1px solid #e8dcc8;
+  border-radius:14px;font-size:15px;font-weight:500;
+  cursor:pointer;margin-top:12px;text-align:center;
+  transition:all .25s cubic-bezier(.22,1,.36,1);
+  box-shadow:0 2px 8px rgba(139,119,89,.06);
+}
+.btn-secondary:hover{
+  background:#faf7f2;
+  transform:translateY(-1px);
+  box-shadow:0 4px 16px rgba(139,119,89,.1);
+}
+.btn-secondary:active{
+  background:#f3ece0;
+  transform:scale(.97);
+}
+
+.btn-complete{
+  background:linear-gradient(135deg,#34d399 0%,#059669 100%);
+  color:#ffffff;
+  box-shadow:0 4px 20px rgba(52,211,153,.35);
+}
+.btn-complete:hover{
+  box-shadow:0 8px 32px rgba(52,211,153,.45);
+}
+.btn-complete:active{background:linear-gradient(135deg,#059669 0%,#047857 100%)}
+
+/* Streak */
+.streak{
+  text-align:center;color:#b8860b;
+  font-size:14px;margin:10px 0;font-weight:600;
+}
+
+/* Done check */
+.done-check{text-align:center;margin:24px 0}
+.done-check .big{font-size:48px}
+.done-check p{color:#8b7759;font-size:14px;margin:10px 0}
+
+/* Name input */
+.name-input{
+  width:100%;padding:15px;
+  background:#ffffff;
+  border:1px solid #e8dcc8;
+  border-radius:14px;font-size:15px;
+  text-align:center;outline:none;
+  color:#2d2a24;margin-bottom:14px;
+  transition:border-color .3s,box-shadow .3s;
+  box-shadow:0 2px 8px rgba(139,119,89,.04);
+}
+.name-input::placeholder{color:#b5a78e}
+.name-input:focus{
+  border-color:#daa520;
+  animation:goldGlow 2s ease-in-out infinite;
+}
+
+/* === Prayer Page === */
+.topbar{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:10px 0;font-size:13px;color:#8b7759;
+}
+.topbar a{
+  color:#8b7759;text-decoration:none;
+  font-weight:500;transition:color .2s;
+  padding:4px 0;
+}
+.topbar a:hover{color:#b8860b}
+
+/* Step header */
+.step-icon{
+  font-size:52px;text-align:center;margin:20px 0 14px;
+  width:80px;height:80px;
+  display:flex;align-items:center;justify-content:center;
+  margin-left:auto;margin-right:auto;
+  background:#ffffff;
+  border-radius:24px;
+  border:1px solid #e8dcc8;
+  box-shadow:0 4px 16px rgba(139,119,89,.08);
+  animation:bounceIn .6s cubic-bezier(.22,1,.36,1);
+}
+.step-title{
+  font-family:'Noto Serif KR',Georgia,serif;
+  font-size:22px;font-weight:700;text-align:center;color:#2d2a24;
+}
+.step-subtitle{
+  text-align:center;color:#b8860b;
+  font-size:12px;margin-top:6px;
+  letter-spacing:1px;text-transform:uppercase;font-weight:500;
+}
+
+/* Guide box */
+.guide-box{
+  background:#ffffff;
+  border:1px solid #e8dcc8;
+  border-radius:16px;
+  padding:20px;margin:20px 0;
+  font-size:14.5px;color:#4a4035;line-height:1.85;
+  box-shadow:0 4px 24px rgba(139,119,89,.06);
+  border-left:4px solid #daa520;
+  position:relative;
+}
+
+/* Bible text */
+.bible-box{
+  background:#ffffff;
+  border:1px solid #e8dcc8;
+  border-radius:16px;
+  padding:22px 20px;margin:16px 0;
+  font-family:'Noto Serif KR',Georgia,'Times New Roman',serif;
+  font-size:15px;color:#374151;line-height:2.1;
+  max-height:50vh;overflow-y:auto;
+  box-shadow:0 4px 24px rgba(139,119,89,.06);
+  border-top:3px solid #daa520;
+}
+.bible-box::-webkit-scrollbar{width:4px}
+.bible-box::-webkit-scrollbar-track{background:transparent}
+.bible-box::-webkit-scrollbar-thumb{background:rgba(184,134,11,.3);border-radius:4px}
+
+/* Summary / meditation box */
+.summary-box{
+  background:#ffffff;
+  border:1px solid #e8dcc8;
+  border-radius:16px;
+  padding:22px 20px;margin:16px 0;
+  box-shadow:0 4px 24px rgba(139,119,89,.06);
+  border-left:4px solid #b8860b;
+}
+.summary-box .label{
+  font-size:14px;color:#b8860b;margin-bottom:12px;
+  display:flex;align-items:center;gap:8px;font-weight:700;
+}
+.summary-box p{font-size:13.5px;color:#374151;line-height:1.75}
+.summary-box b{color:#8b6914;font-size:14.5px;display:inline-block;margin-top:6px}
+
+/* Memo textarea */
+.memo{
+  width:100%;
+  background:#ffffff;
+  border:2px solid #e8dcc8;
+  border-radius:16px;padding:16px 18px;
+  color:#2d2a24;font-size:15px;
+  resize:none;outline:none;
+  min-height:100px;font-family:inherit;line-height:1.7;
+  transition:border-color .3s,box-shadow .3s;
+  box-shadow:0 2px 12px rgba(139,119,89,.04);
+}
+.memo::placeholder{color:#b5a78e}
+.memo:focus{
+  border-color:#daa520;
+  animation:goldGlow 2s ease-in-out infinite;
+}
+
+/* Nav buttons */
+.nav-buttons{
+  display:flex;gap:12px;padding:16px 0;
+  margin-top:auto;
+  padding-bottom:max(16px,env(safe-area-inset-bottom));
+}
+.nav-buttons button{flex:1;font-weight:600}
+
+/* === Complete Page === */
+.complete-icon{
+  font-size:64px;text-align:center;margin:40px 0 20px;
+  animation:celebratePulse 2s ease-in-out infinite;
+}
+.complete-title{
+  font-family:'Noto Serif KR',Georgia,serif;
+  font-size:24px;font-weight:700;text-align:center;color:#2d2a24;
+}
+.complete-body{
+  text-align:center;color:#5a5347;
+  font-size:14px;line-height:1.85;
+  margin:14px auto 0;max-width:320px;
+}
+
+/* Stats */
+.stats{
+  display:grid;grid-template-columns:1fr 1fr;gap:16px;
+  text-align:center;margin:20px 0;
+}
+.stat-num{font-size:28px;font-weight:800}
+.stat-num.purple{color:#b8860b}
+.stat-num.green{color:#059669}
+.stat-label{font-size:11px;color:#8b7759;margin-top:6px;letter-spacing:.5px}
+
+/* Footer */
+.footer{
+  text-align:center;color:#b5a78e;
+  font-size:12px;margin-top:28px;letter-spacing:.5px;
+}
+
+/* Completion memo card */
+#comp-memos{
+  background:#ffffff;
+  border:1px solid #e8dcc8;
+  border-radius:16px;
+  padding:24px 20px;
+  box-shadow:0 4px 24px rgba(139,119,89,.06);
+}
+
+/* Confetti particles */
+.confetti-container{
+  position:fixed;top:0;left:0;width:100%;height:100%;
+  pointer-events:none;z-index:999;overflow:hidden;
+}
+.confetti{
+  position:absolute;width:10px;height:10px;
+  border-radius:2px;
+  animation:confettiFall 3s linear forwards;
+}
 </style>
 </head>
 <body>
@@ -74,22 +396,22 @@ h1{font-size:22px;text-align:center;font-weight:700}
   <div class="home-icon">📖</div>
   <h1>QT 7분법 기도</h1>
   <p class="subtitle">매일 말씀과 함께하는 기도</p>
+  <p class="streak" id="home-streak" style="display:none"></p>
   <div class="card">
     <div class="card-label">오늘의 말씀</div>
     <div class="card-title" id="home-chapter"></div>
     <div class="card-sub" id="home-book-progress"></div>
-    <div class="progress-label"><span>전체 진행률</span><span id="home-total-progress"></span></div>
-    <div class="progress-bar"><div class="progress-fill" id="home-progress-bar"></div></div>
+    <div class="progress-bar" style="margin-top:16px;display:none"><div class="progress-fill" id="home-progress-bar" style="width:0%"></div></div>
+    <div class="progress-label" style="display:none"><span id="home-total-progress"></span><span></span></div>
   </div>
-  <div class="streak" id="home-streak"></div>
   <div id="home-start">
-    <input type="text" id="user-name" placeholder="이름 입력 (선택사항)" style="width:100%;padding:14px;background:#fff;border:1px solid #e4e4e7;border-radius:12px;font-size:15px;text-align:center;outline:none;color:#1a1a1a;margin-bottom:12px" autocomplete="off">
-    <button class="btn-primary" onclick="startPrayer()">기도 🙏</button>
+    <input type="text" id="user-name" class="name-input" placeholder="이름 입력 (선택사항)" autocomplete="off">
+    <button class="btn-primary" onclick="startPrayer()">기도 시작</button>
   </div>
   <div id="home-done" class="done-check" style="display:none">
     <div class="big">✅</div>
     <p>오늘의 기도를 완료했어요!</p>
-    <a href="#" onclick="startPrayer();return false" style="color:#a78bfa;font-size:13px">다시 보기</a>
+    <a href="#" onclick="startPrayer();return false" style="color:#b8860b;font-size:14px;font-weight:500">다시 보기</a>
   </div>
   <p class="footer">매일 1장씩, 성경 전체를 함께 읽어요</p>
 </div>
@@ -98,16 +420,16 @@ h1{font-size:22px;text-align:center;font-weight:700}
 <div id="page-prayer" class="page">
   <div class="topbar">
     <a href="#" onclick="goHome();return false">← 홈</a>
-    <span id="prayer-step-label">묵상</span>
-    <span id="prayer-chapter-label"></span>
+    <span id="prayer-step-label" style="color:#b8860b;font-weight:600">묵상</span>
+    <span id="prayer-chapter-label" style="color:#8b7759"></span>
   </div>
-  <div class="progress-bar" style="margin-bottom:8px"><div class="progress-fill" id="prayer-progress"></div></div>
+  <div class="progress-bar" style="margin-bottom:12px"><div class="progress-fill" id="prayer-progress"></div></div>
 
   <div id="prayer-content"></div>
 
   <div class="nav-buttons">
     <button class="btn-secondary" id="btn-prev" onclick="prevStep()" style="display:none">← 이전</button>
-    <button class="btn-primary" id="btn-next" onclick="nextStep()">기도 🙏</button>
+    <button class="btn-primary" id="btn-next" onclick="nextStep()">다음 단계 →</button>
   </div>
 </div>
 
@@ -123,10 +445,10 @@ h1{font-size:22px;text-align:center;font-weight:700}
     </div>
   </div>
   <!-- 오늘의 기도 기록 -->
-  <div id="comp-memos" class="card" style="text-align:left;margin-top:12px"></div>
-  <button class="btn-primary" onclick="downloadMemoImage()" style="margin-top:12px">기도 기록 저장 📷</button>
+  <div id="comp-memos" class="card" style="text-align:left;margin-top:12px;color:#374151"></div>
+  <button class="btn-primary" onclick="downloadMemoImage()" style="margin-top:14px">기도 기록 저장 📷</button>
   <button class="btn-secondary" onclick="goHome()">홈으로 돌아가기</button>
-  <p class="footer">내일도 함께 기도해요 🙏</p>
+  <p class="footer">내일도 함께 기도해요</p>
 </div>
 <!-- Hidden canvas for image generation -->
 <canvas id="memo-canvas" style="display:none"></canvas>
@@ -137,7 +459,6 @@ h1{font-size:22px;text-align:center;font-weight:700}
 const BOOKS=[['마태복음','matt',28],['마가복음','mark',16],['누가복음','luke',24],['요한복음','john',21],['사도행전','acts',28],['로마서','rom',16],['고린도전서','1cor',16],['고린도후서','2cor',13],['갈라디아서','gal',6],['에베소서','eph',6],['빌립보서','phil',4],['골로새서','col',4],['데살로니가전서','1thess',5],['데살로니가후서','2thess',3],['디모데전서','1tim',6],['디모데후서','2tim',4],['디도서','titus',3],['빌레몬서','phlm',1],['히브리서','heb',13],['야고보서','jas',5],['베드로전서','1pet',5],['베드로후서','2pet',3],['요한일서','1john',5],['요한이서','2john',1],['요한삼서','3john',1],['유다서','jude',1],['요한계시록','rev',22],['창세기','gen',50],['출애굽기','exod',40],['레위기','lev',27],['민수기','num',36],['신명기','deut',34],['여호수아','josh',24],['사사기','judg',21],['룻기','ruth',4],['사무엘상','1sam',31],['사무엘하','2sam',24],['열왕기상','1kgs',22],['열왕기하','2kgs',25],['역대상','1chr',29],['역대하','2chr',36],['에스라','ezra',10],['느헤미야','neh',13],['에스더','esth',10],['욥기','job',42],['시편','ps',150],['잠언','prov',31],['전도서','eccl',12],['아가','song',8],['이사야','isa',66],['예레미야','jer',52],['예레미야애가','lam',5],['에스겔','ezek',48],['다니엘','dan',12],['호세아','hos',14],['요엘','joel',3],['아모스','amos',9],['오바댜','obad',1],['요나','jonah',4],['미가','mic',7],['나훔','nah',3],['하박국','hab',3],['스바냐','zeph',3],['학개','hag',2],['스가랴','zech',14],['말라기','mal',4]];
 const ALL=[];let idx=0;BOOKS.forEach(([ko,en,tc])=>{const s=ko==='마태복음'?2:1;for(let c=s;c<=tc;c++){ALL.push({ko,en,ch:c,tc,gi:idx++})}});
 const TOTAL=ALL.length;
-const SECTION_SIZE=12; // 한 번에 보여줄 최대 절 수
 
 const STEPS=[
 {id:2,title:'찬양과 경배',sub:'Praise & Worship',icon:'🎵',guide:'하나님의 위대하심과 선하심을 찬양하며, 마음을 다해 경배하세요. 하나님이 어떤 분이신지, 나에게 어떤 일을 행하셨는지 고백하며 찬양을 올려드립니다. 찬양은 말로, 노래로, 또는 마음속 고백으로도 할 수 있습니다.',ph:'하나님께 드리는 찬양과 경배를 적어보세요...'},
@@ -170,11 +491,88 @@ const today=()=>new Date().toISOString().split('T')[0];
 const lsGet=(k)=>localStorage.getItem('qt-'+k)||'';
 const lsSet=(k,v)=>localStorage.setItem('qt-'+k,v);
 
+// 연간 성경 읽기 표 (월-일 → 성경 구절) — 첨부된 읽기표 기반
+const YEARLY_PLAN = {
+  // 4월 (사진 기반 정확 입력)
+  '4-1':'요 18:39-19:16','4-2':'요 19:30-42','4-3':'요 20:1-18','4-4':'요 20:19-31',
+  '4-5':'요 21:1-14','4-6':'요 21:15-25','4-7':'창 21:1-7','4-8':'창 22:1-19',
+  '4-9':'창 23:1-20','4-10':'창 24:1-27','4-11':'창 24:28-67','4-12':'창 25:1-18',
+  '4-13':'창 25:19-34','4-14':'창 25:19-34','4-15':'창 26:1-16','4-16':'창 26:17-35',
+  '4-17':'창 27:1-29','4-18':'창 27:30-46','4-19':'창 28:1-9','4-20':'창 28:10-22',
+  '4-21':'창 28:10-22','4-22':'창 29:1-14','4-23':'창 29:15-30','4-24':'창 30:1-24',
+  '4-25':'창 30:25-43','4-26':'창 31:1-16','4-27':'창 31:17-42','4-28':'창 31:17-42',
+  '4-29':'창 31:43-55','4-30':'창 32:1-21',
+  // 5월 (사진 기반)
+  '5-1':'창 33:1-20','5-2':'창 34:1-7','5-3':'창 35:1-15','5-4':'창 35:16-29',
+  '5-5':'창 36:1-8','5-6':'창 37:1-11','5-7':'창 37:12-36','5-8':'창 38:1-30',
+  '5-9':'창 39:1-6','5-10':'창 39:7-23','5-11':'창 40:1-23','5-12':'창 40:1-23',
+  '5-13':'창 41:1-16','5-14':'창 41:17-36','5-15':'창 41:37-57','5-16':'창 42:1-17',
+  '5-17':'창 42:18-38','5-18':'창 43:1-14','5-19':'창 43:1-14','5-20':'창 43:15-34',
+  '5-21':'창 44:1-17','5-22':'창 44:18-34','5-23':'창 45:1-15','5-24':'창 45:16-28',
+  '5-25':'창 46:1-27','5-26':'창 46:1-27','5-27':'창 47:1-12','5-28':'창 47:13-31',
+  '5-29':'창 48:1-22','5-30':'창 49:1-28','5-31':'창 50:1-26',
+  // 6월 (사진 기반)
+  '6-1':'고전 1:1-9','6-2':'고전 1:1-9','6-3':'고전 1:10-17','6-4':'고전 1:18-31',
+  '6-5':'고전 2:1-5','6-6':'고전 2:6-16','6-7':'고전 3:1-9','6-8':'고전 3:10-23',
+  '6-9':'고전 3:10-23','6-10':'고전 4:1-5','6-11':'고전 4:6-13','6-12':'고전 4:14-21',
+  '6-13':'고전 5:1-8','6-14':'고전 5:9-13','6-15':'고전 6:1-11','6-16':'고전 6:1-11',
+  '6-17':'고전 6:12-20','6-18':'고전 7:1-9','6-19':'고전 7:10-24','6-20':'고전 7:25-40',
+  '6-21':'고전 8:1-13','6-22':'고전 9:1-12','6-23':'고전 9:1-12','6-24':'고전 9:13-27',
+  '6-25':'고전 10:1-13','6-26':'고전 10:14-33','6-27':'고전 11:1-16','6-28':'고전 11:17-34',
+  '6-29':'고전 12:1-11','6-30':'고전 12:1-11',
+};
+
+// 한글 성경 약어 → BOOKS 매핑
+const KO_TO_EN = {
+  '창':'gen','출':'exod','레':'lev','민':'num','신':'deut','수':'josh','삿':'judg','룻':'ruth',
+  '삼상':'1sam','삼하':'2sam','왕상':'1kgs','왕하':'2kgs','대상':'1chr','대하':'2chr',
+  '스':'ezra','느':'neh','에':'esth','욥':'job','시':'ps','잠':'prov','전':'eccl','아':'song',
+  '사':'isa','렘':'jer','애':'lam','겔':'ezek','단':'dan','호':'hos','욜':'joel','암':'amos',
+  '옵':'obad','욘':'jonah','미':'mic','나':'nah','합':'hab','습':'zeph','학':'hag','슥':'zech','말':'mal',
+  '마':'matt','막':'mark','눅':'luke','요':'john','행':'acts','롬':'rom',
+  '고전':'1cor','고후':'2cor','갈':'gal','엡':'eph','빌':'phil','골':'col',
+  '살전':'1thess','살후':'2thess','딤전':'1tim','딤후':'2tim','딛':'titus','몬':'phlm',
+  '히':'heb','약':'jas','벧전':'1pet','벧후':'2pet','요일':'1john','요이':'2john','요삼':'3john',
+  '유':'jude','계':'rev',
+};
+const KO_FULL = {
+  '창':'창세기','출':'출애굽기','레':'레위기','민':'민수기','신':'신명기','수':'여호수아','삿':'사사기','룻':'룻기',
+  '삼상':'사무엘상','삼하':'사무엘하','왕상':'열왕기상','왕하':'열왕기하','대상':'역대상','대하':'역대하',
+  '스':'에스라','느':'느헤미야','에':'에스더','욥':'욥기','시':'시편','잠':'잠언','전':'전도서','아':'아가',
+  '사':'이사야','렘':'예레미야','애':'예레미야애가','겔':'에스겔','단':'다니엘','호':'호세아','욜':'요엘','암':'아모스',
+  '옵':'오바댜','욘':'요나','미':'미가','나':'나훔','합':'하박국','습':'스바냐','학':'학개','슥':'스가랴','말':'말라기',
+  '마':'마태복음','막':'마가복음','눅':'누가복음','요':'요한복음','행':'사도행전','롬':'로마서',
+  '고전':'고린도전서','고후':'고린도후서','갈':'갈라디아서','엡':'에베소서','빌':'빌립보서','골':'골로새서',
+  '살전':'데살로니가전서','살후':'데살로니가후서','딤전':'디모데전서','딤후':'디모데후서','딛':'디도서','몬':'빌레몬서',
+  '히':'히브리서','약':'야고보서','벧전':'베드로전서','벧후':'베드로후서','요일':'요한일서','요이':'요한이서','요삼':'요한삼서',
+  '유':'유다서','계':'요한계시록',
+};
+
 function getChapter(){
+  const now = new Date();
+  const m = now.getMonth() + 1;
+  const d = now.getDate();
+  const key = m + '-' + d;
+  const plan = YEARLY_PLAN[key];
+
+  if (plan) {
+    // "시 29:1-11" → 파싱
+    const match = plan.match(/^(\S+)\s+(\d+):(.+)$/);
+    if (match) {
+      const abbr = match[1];
+      const ch = parseInt(match[2]);
+      const verses = match[3]; // "1-11" or "1-6"
+      const en = KO_TO_EN[abbr] || abbr;
+      const ko = KO_FULL[abbr] || abbr;
+      return { ko, en, ch, tc: ch, gi: 0, verses };
+    }
+  }
+
+  // fallback: 기존 순차 방식
   const start=new Date(lsGet('start')||'2026-04-13');
-  const now=new Date();start.setHours(0,0,0,0);now.setHours(0,0,0,0);
-  const d=Math.floor((now-start)/(864e5));
-  return ALL[((d%TOTAL)+TOTAL)%TOTAL];
+  start.setHours(0,0,0,0);now.setHours(0,0,0,0);
+  const dd=Math.floor((now-start)/(864e5));
+  return ALL[((dd%TOTAL)+TOTAL)%TOTAL];
 }
 function getHistory(){try{return JSON.parse(lsGet('history')||'[]')}catch{return[]}}
 
@@ -182,133 +580,198 @@ function generateMeditation(ch, text) {
   const lines = text.split('\n').filter(l=>l.trim());
   const clean = v=>v.replace(/^\d+\.\s*/,'').trim();
   const name = ch.ko+' '+ch.ch+'장';
-  const total = lines.length;
 
-  // Pick 2 key verses from this section
-  const v1 = clean(lines[Math.min(1, total-1)]||'');
-  const v2 = clean(lines[Math.max(0, total-2)]||'');
+  // Parse verses into array of {num, text}
+  const verses = lines.map(l => {
+    const m = l.match(/^(\d+)\.\s*(.*)/);
+    return m ? {num:parseInt(m[1]), text:m[2].trim()} : {num:0, text:l.trim()};
+  }).filter(v=>v.text);
 
-  // Extract people names mentioned
+  // Pick key verses - choose substantive ones (longer text, not just names/genealogy)
+  const substantive = verses.filter(v=>v.text.length>20 && !v.text.match(/^[가-힣]+[이가은는]$/));
+  const keyVerses = [];
+  if(substantive.length>=3) {
+    // Pick from beginning, middle, end thirds
+    const third = Math.floor(substantive.length/3);
+    keyVerses.push(substantive[Math.min(1,third-1)]);
+    keyVerses.push(substantive[third + Math.floor(third/2)]);
+    keyVerses.push(substantive[Math.min(third*2 + Math.floor(third/2), substantive.length-1)]);
+  } else {
+    substantive.forEach(v=>keyVerses.push(v));
+    while(keyVerses.length<2 && verses.length>0) keyVerses.push(verses[Math.floor(verses.length/2)]);
+  }
+
+  // Extract people
   const people = [];
-  const pMatch = text.match(/예수|모세|다윗|아브라함|야곱|요셉|바울|베드로|엘리야|사울|솔로몬|여호수아|이삭|사무엘|느헤미야|에스더|룻|다니엘|요나|마리아|헤롯|빌라도|니고데모|삭개오/g);
+  const pMatch = text.match(/예수|그리스도|모세|다윗|아브라함|야곱|요셉|바울|베드로|엘리야|엘리사|사울|솔로몬|여호수아|이삭|사무엘|느헤미야|에스더|룻|다니엘|요나|마리아|헤롯|빌라도|니고데모|삭개오|기드온|삼손|라합|한나|드보라|에스겔|이사야|예레미야|호세아|미가|하박국|요한|마태|누가|마가|디모데|디도|브리스길라|아굴라/g);
   if(pMatch) pMatch.forEach(p=>{if(!people.includes(p))people.push(p)});
 
   // Extract places
   const places = [];
-  const plMatch = text.match(/예루살렘|베들레헴|이집트|애굽|가나안|바벨론|갈릴리|나사렛|시내산|요단|시온|다메섹|고린도|로마|안디옥/g);
+  const plMatch = text.match(/예루살렘|베들레헴|이집트|애굽|가나안|바벨론|갈릴리|나사렛|시내산|요단|시온|다메섹|고린도|로마|안디옥|니느웨|사마리아|벧엘|길갈|여리고|성전|회당|광야|바다/g);
   if(plMatch) plMatch.forEach(p=>{if(!places.includes(p))places.push(p)});
 
-  // Detect multiple themes with weights
-  const th = [];
-  if(text.match(/왕|나라|통치|다스리|보좌|권세/)) th.push('kingdom');
-  if(text.match(/두려|무서|걱정|염려|떨/)) th.push('fear');
-  if(text.match(/사랑|긍휼|은혜|자비|돌보/)) th.push('love');
-  if(text.match(/믿음|신뢰|의지|의롭/)) th.push('faith');
-  if(text.match(/순종|명령|계명|지키/)) th.push('obey');
-  if(text.match(/죄|악|회개|용서|돌이키/)) th.push('repent');
-  if(text.match(/감사|찬양|영광|높이|노래/)) th.push('praise');
-  if(text.match(/소망|희망|기다|인내|참/)) th.push('hope');
-  if(text.match(/구원|구하|건지|살리|십자가/)) th.push('salvation');
-  if(text.match(/평안|평화|쉼|안식/)) th.push('peace');
-  if(text.match(/치유|고치|낫|병|아픔/)) th.push('healing');
-  if(text.match(/기도|간구|부르짖|무릎/)) th.push('prayer');
-  if(text.match(/제자|따르|섬기|봉사|사역/)) th.push('serve');
-  if(text.match(/심판|징계|경고|멸망/)) th.push('judgment');
-  if(text.match(/약속|언약|맹세|보장/)) th.push('promise');
-  if(text.match(/지혜|총명|깨달|분별/)) th.push('wisdom');
-  if(text.match(/창조|만드|태초|하늘|땅/)) th.push('creation');
-  if(text.match(/부활|살아나|무덤|죽음을 이기/)) th.push('resurrection');
+  // Detect themes with specific verse references
+  const themes = [];
+  verses.forEach(v => {
+    const t = v.text;
+    if(t.match(/왕|나라|통치|다스리|보좌|권세|다스림/)) themes.push({cat:'kingdom',v});
+    if(t.match(/두려|무서|걱정|염려|떨며|두렵/)) themes.push({cat:'fear',v});
+    if(t.match(/사랑|긍휼|은혜|자비|돌보|사랑하/)) themes.push({cat:'love',v});
+    if(t.match(/믿음|신뢰|의지|의롭|믿으/)) themes.push({cat:'faith',v});
+    if(t.match(/순종|명령|계명|지키|따르라/)) themes.push({cat:'obey',v});
+    if(t.match(/죄|악|회개|용서|돌이키|범죄/)) themes.push({cat:'repent',v});
+    if(t.match(/감사|찬양|영광|높이|노래하/)) themes.push({cat:'praise',v});
+    if(t.match(/소망|희망|기다|인내|참으/)) themes.push({cat:'hope',v});
+    if(t.match(/구원|구하|건지|살리|십자가|대속/)) themes.push({cat:'salvation',v});
+    if(t.match(/평안|평화|쉼|안식|평강/)) themes.push({cat:'peace',v});
+    if(t.match(/치유|고치|낫게|병|아픔|고침/)) themes.push({cat:'healing',v});
+    if(t.match(/기도|간구|부르짖|무릎|구하/)) themes.push({cat:'prayer',v});
+    if(t.match(/지혜|총명|깨달|분별|명철/)) themes.push({cat:'wisdom',v});
+    if(t.match(/약속|언약|맹세/)) themes.push({cat:'promise',v});
+    if(t.match(/제자|섬기|봉사|사역|종/)) themes.push({cat:'serve',v});
+    if(t.match(/심판|징계|경고|멸망|진노/)) themes.push({cat:'judgment',v});
+  });
 
+  // Get unique theme categories, pick top 3 by frequency
+  const themeCounts = {};
+  themes.forEach(t => { themeCounts[t.cat] = (themeCounts[t.cat]||0) + 1; });
+  const topThemes = Object.entries(themeCounts).sort((a,b)=>b[1]-a[1]).slice(0,3).map(e=>e[0]);
+
+  // Get a representative verse for each top theme
+  const themeVerse = {};
+  topThemes.forEach(cat => {
+    const candidates = themes.filter(t=>t.cat===cat);
+    // Pick the one with longest text (most substantive)
+    themeVerse[cat] = candidates.sort((a,b)=>b.v.text.length-a.v.text.length)[0].v;
+  });
+
+  // Theme display names and deep reflections
+  const themeData = {
+    kingdom: {name:'하나님의 주권', reflect:'나의 삶에서 하나님을 왕으로 모시지 못하고 있는 영역은 없는지, 내가 스스로 통제하려 애쓰는 부분을 하나님께 내려놓을 수 있는지'},
+    fear: {name:'두려움과 신뢰', reflect:'지금 나를 두렵게 하는 것은 무엇인지, 그 두려움 앞에서 하나님의 동행을 어떻게 경험할 수 있을지'},
+    love: {name:'하나님의 사랑', reflect:'최근 하나님의 사랑을 느끼지 못했던 순간이 있었는지, 그 사랑을 받아들이지 못하게 막는 것이 무엇인지'},
+    faith: {name:'믿음', reflect:'내 믿음이 머리에만 머물러 있는 것은 아닌지, 삶의 구체적인 결정에서 믿음으로 한 발짝 나아간 적이 언제인지'},
+    obey: {name:'순종', reflect:'하나님이 나에게 요구하시지만 내가 미루고 있는 순종이 있는지, 그 순종을 어렵게 만드는 것이 무엇인지'},
+    repent: {name:'회개와 용서', reflect:'하나님 앞에 내려놓아야 할 죄가 있는지, 또 내가 용서하지 못하고 있는 사람이 있는지'},
+    praise: {name:'찬양과 감사', reflect:'환경이 어려울 때에도 하나님을 찬양할 수 있는지, 오늘 감사할 수 있는 구체적인 것 세 가지는 무엇인지'},
+    hope: {name:'소망', reflect:'지금 포기하고 싶은 것이 있는지, 하나님의 시간표를 신뢰하며 조금 더 기다릴 수 있는지'},
+    salvation: {name:'구원', reflect:'구원의 은혜가 내 일상에서 어떻게 살아 있는지, 이 놀라운 은혜를 당연하게 여기고 있지는 않는지'},
+    peace: {name:'참된 평안', reflect:'지금 나의 마음에 평안이 있는지, 평안을 빼앗기고 있다면 그 원인이 무엇인지'},
+    healing: {name:'치유', reflect:'내 안에 치유받아야 할 상처가 있는지, 하나님의 치유하시는 손길을 믿고 그 아픔을 내려놓을 수 있는지'},
+    prayer: {name:'기도', reflect:'나의 기도 생활은 어떤 상태인지, 형식적인 기도에서 벗어나 하나님과 진솔하게 대화하고 있는지'},
+    wisdom: {name:'지혜', reflect:'최근 중요한 결정 앞에서 하나님의 지혜를 구했는지, 세상의 기준이 아닌 하나님의 관점으로 상황을 바라보고 있는지'},
+    promise: {name:'하나님의 약속', reflect:'내가 붙잡고 있는 하나님의 약속이 있는지, 그 약속을 기다리는 동안 어떤 마음으로 살아가고 있는지'},
+    serve: {name:'섬김', reflect:'나는 누구를 섬기고 있는지, 섬김이 의무가 아닌 기쁨이 되려면 내 마음에 어떤 변화가 필요한지'},
+    judgment: {name:'하나님의 공의', reflect:'하나님의 경고 앞에서 내 삶을 정직하게 점검하고 있는지, 이 말씀이 나에게 방향을 바꾸라고 말하는 부분이 있는지'},
+  };
+
+  // === Build meditation ===
   let p = '';
 
-  // Opening - specific to this chapter
-  p += `${name}은 총 ${total}절의 말씀입니다. `;
-
+  // 1. 관찰(Observation) - 말씀에서 무엇을 보는가
+  p += `<b>📖 관찰 — 말씀이 말하는 것</b>\n`;
+  p += `${name}에서 `;
   if(people.length>0) {
-    p += `이 말씀에는 ${people.slice(0,3).join(', ')}${people.length>3?'등이':'이'} 등장합니다. `;
-  }
-  if(places.length>0) {
-    p += `${places.slice(0,2).join('과 ')}${places.length>1?'을':'를'} 배경으로 펼쳐지는 이야기입니다. `;
-  }
-
-  // First verse analysis
-  p += `말씀은 "${v1.substring(0,50)}"(으)로 시작합니다. `;
-
-  // Theme-based deep content (using actual verse content)
-  if(th.includes('kingdom')) {
-    p += `이 말씀은 하나님의 나라와 그분의 주권을 선포합니다. 인간의 왕국은 흥하고 망하지만 하나님의 나라는 영원합니다. 우리가 어떤 세상적 권력 앞에 서 있든, 궁극적인 통치자는 하나님이시라는 사실이 우리에게 큰 위로가 됩니다. `;
-  }
-  if(th.includes('fear')) {
-    p += `이 말씀 속 인물들은 두려운 상황에 직면했습니다. 그러나 하나님은 그 두려움 한가운데서 "내가 너와 함께하노라"고 말씀하셨습니다. 두려움은 우리를 하나님께로 더 가까이 이끄는 초대장이 될 수 있습니다. `;
-  }
-  if(th.includes('love')) {
-    p += `하나님의 사랑이 이 말씀 곳곳에 스며들어 있습니다. 조건 없이, 변함없이 우리를 향하시는 그 사랑은 우리가 받을 수 있는 가장 큰 선물입니다. 이 사랑을 깊이 묵상할 때 우리의 마음도 변화됩니다. `;
-  }
-  if(th.includes('faith')) {
-    p += `이 말씀은 믿음의 본질이 무엇인지 보여줍니다. 눈에 보이는 것이 아니라 보이지 않는 하나님의 약속을 붙잡는 것, 그것이 성경이 말하는 믿음입니다. 이 말씀 속 인물들의 믿음에서 우리도 도전을 받습니다. `;
-  }
-  if(th.includes('repent')) {
-    p += `하나님은 우리의 잘못을 지적하시되, 정죄하시려는 것이 아니라 회복시키시려는 것입니다. 회개는 하나님과의 관계가 새로워지는 놀라운 경험입니다. 하나님 앞에 솔직해질 수 있는 용기를 구합니다. `;
-  }
-  if(th.includes('obey')) {
-    p += `순종의 길은 때로 이해하기 어렵지만, 하나님의 관점에서 보면 그것이 가장 지혜로운 선택입니다. 이 말씀은 순종할 때 따라오는 축복과 불순종의 결과를 분명하게 보여줍니다. `;
-  }
-  if(th.includes('salvation')) {
-    p += `구원의 이야기가 이 말씀에 담겨 있습니다. 하나님은 처음부터 인류를 구원하시려는 위대한 계획을 가지고 계셨고, 그 계획은 단 한 순간도 멈춘 적이 없습니다. `;
-  }
-  if(th.includes('healing')) {
-    p += `상한 심령을 치유하시는 하나님의 손길이 이 말씀에 나타납니다. 육체적 치유뿐 아니라 마음과 영혼의 회복까지, 하나님은 온전한 치유를 원하십니다. `;
-  }
-  if(th.includes('prayer')) {
-    p += `이 말씀은 기도의 능력을 보여줍니다. 간절한 기도가 하늘의 문을 열고, 불가능해 보이는 상황을 변화시킵니다. 기도는 우리가 가진 가장 강력한 무기입니다. `;
-  }
-  if(th.includes('wisdom')) {
-    p += `하나님의 지혜는 세상의 지혜와 다릅니다. 이 말씀은 참된 지혜가 어디에서 오는지, 그리고 그 지혜가 우리 삶을 어떻게 인도하는지 알려줍니다. `;
-  }
-  if(th.includes('promise')) {
-    p += `하나님의 약속이 이 말씀에 선명하게 드러납니다. 한 번 하신 약속은 반드시 이루시는 분, 그분의 신실하심을 우리는 역사 속에서 반복적으로 확인할 수 있습니다. `;
-  }
-  if(th.includes('judgment')) {
-    p += `하나님의 공의가 이 말씀에 나타납니다. 심판의 메시지가 두렵게 느껴질 수 있지만, 그것은 우리를 올바른 길로 인도하시려는 사랑의 경고입니다. `;
-  }
-  if(th.includes('praise')) {
-    p += `하나님을 찬양하는 것은 단순한 종교적 행위가 아니라, 삶의 모든 순간에 하나님의 선하심을 인정하는 것입니다. 찬양할 때 우리의 시선이 문제에서 하나님께로 옮겨집니다. `;
-  }
-  if(th.includes('hope')) {
-    p += `절망 속에서도 소망이 있다는 것, 이것이 이 말씀이 전하는 핵심 메시지입니다. 당장 눈앞이 막막해도, 하나님은 이미 길을 예비해 두셨습니다. `;
-  }
-  if(th.includes('serve')) {
-    p += `섬김의 삶은 예수님이 직접 보여주신 길입니다. 높은 자리가 아닌 낮은 자리에서 시작되는 하나님 나라의 원리가 이 말씀에 담겨 있습니다. `;
-  }
-  if(th.includes('creation')) {
-    p += `만물을 창조하신 하나님의 위대하심이 이 말씀에 드러납니다. 그 위대하신 분이 우리 한 사람 한 사람을 소중히 여기신다는 사실이 경이롭습니다. `;
-  }
-  if(th.includes('resurrection')) {
-    p += `죽음을 이기신 부활의 능력이 이 말씀에 선포됩니다. 부활은 우리 믿음의 핵심이며, 이 땅의 모든 고통과 아픔에도 마지막 승리가 있다는 확증입니다. `;
-  }
-  if(th.includes('peace')) {
-    p += `참된 평안은 환경에 좌우되지 않습니다. 하나님이 주시는 평안은 폭풍 한가운데서도 잔잔한 호수처럼 우리 마음을 지켜 줍니다. `;
+    p += `우리는 ${people.slice(0,3).join(', ')}`;
+    if(people.length>3) p += ' 등';
+    if(places.length>0) {
+      p += `이 ${places.slice(0,2).join(', ')}에서 펼치는 이야기를 만납니다. `;
+    } else {
+      p += `의 이야기를 만납니다. `;
+    }
+  } else if(places.length>0) {
+    p += `${places.slice(0,2).join(', ')}을 배경으로 한 이야기가 펼쳐집니다. `;
+  } else {
+    p += `하나님의 깊은 사랑과 인도하심을 보여주는 말씀을 만납니다. `;
   }
 
-  // If no themes detected, use verse content directly
-  if(th.length===0) {
-    p += `이 말씀은 하나님의 성품과 그분의 뜻을 보여주는 귀한 본문입니다. 한 절 한 절 천천히 읽으며 하나님이 어떤 분이신지 묵상해 보세요. `;
+  // Quote key verse from early part
+  if(keyVerses[0]) {
+    const kv = keyVerses[0];
+    p += `${kv.num}절에서 "${kv.text.substring(0,70)}${kv.text.length>70?'...':''}"라고 말씀합니다. `;
   }
 
-  // Key verse highlight
-  p += `특별히 "${v2.substring(0,55)}"라는 말씀에 주목해 봅시다. 이 구절이 오늘 나의 상황에서 어떤 의미를 갖는지 생각해 보세요. `;
+  if(topThemes.length > 0) {
+    p += `이 장의 핵심 주제는 ${topThemes.map(t=>themeData[t]?.name||t).join(', ')}입니다.`;
+  }
 
-  // Unique closing based on chapter number (rotates)
-  const closings = [
-    '이 말씀이 오늘 하루를 살아가는 힘이 되기를 기도합니다.',
-    '이 말씀을 하루 동안 마음에 새기며, 하나님의 음성에 귀 기울이는 하루가 되세요.',
-    '오늘 이 말씀 한 구절을 외워보는 것은 어떨까요? 말씀이 삶을 변화시킵니다.',
-    '이 말씀을 통해 만난 하나님의 마음을 주변 사람들과도 나눠보세요.',
-    '말씀을 묵상한 이 시간이 하루 중 가장 귀한 시간이 되기를 축복합니다.',
-    '하나님이 이 말씀을 통해 당신에게 하신 이야기를 기억하며 하루를 시작하세요.',
-    '오늘 읽은 말씀이 삶의 결정적 순간에 떠올라 지혜를 더해주기를 기도합니다.',
+  // 2. 해석(Interpretation) - 말씀의 의미
+  p += `\n\n<b>💡 해석 — 말씀의 의미</b>\n`;
+
+  if(topThemes.length > 0) {
+    topThemes.forEach((cat, i) => {
+      const td = themeData[cat];
+      const tv = themeVerse[cat];
+      if(!td || !tv) return;
+
+      if(i === 0) {
+        // Main theme - deeper treatment
+        p += `이 말씀에서 가장 강하게 울려퍼지는 메시지는 '${td.name}'입니다. `;
+        p += `${tv.num}절 "${tv.text.substring(0,65)}${tv.text.length>65?'...':''}" — `;
+
+        // Context-specific interpretation based on theme
+        const interps = {
+          kingdom: '이 말씀은 하나님이 모든 상황의 주인이시라는 선언입니다. 세상의 권력은 잠깐이지만, 하나님의 다스리심은 영원합니다. 이 진리를 아는 사람은 어떤 상황에서도 흔들리지 않습니다.',
+          fear: '두려움은 우리가 상황을 혼자 감당해야 한다고 느낄 때 찾아옵니다. 그러나 이 말씀은 우리가 결코 혼자가 아님을 상기시켜 줍니다. 하나님은 두려움의 반대편에서 우리를 부르고 계십니다.',
+          love: '하나님의 사랑은 우리의 행위에 기반하지 않습니다. 잘할 때도, 실패할 때도 변함없이 우리를 향하시는 그 사랑이 이 말씀의 중심입니다. 이 사랑을 진정으로 받아들일 때 우리 안에서 변화가 시작됩니다.',
+          faith: '믿음은 단순한 동의가 아니라 삶의 방향을 바꾸는 결단입니다. 이 말씀 속 인물들은 눈앞의 현실보다 하나님의 말씀을 선택했고, 그 선택이 역사를 바꾸었습니다.',
+          obey: '순종은 이해한 후에 따르는 것이 아니라, 신뢰하기에 먼저 따르는 것입니다. 이 말씀은 순종의 결과가 우리의 예상을 뛰어넘는다는 것을 보여줍니다.',
+          repent: '회개는 부끄러운 것이 아니라 용기 있는 행동입니다. 자신의 잘못을 인정하고 방향을 바꾸는 것, 그것이 하나님과의 관계를 회복하는 유일한 길입니다.',
+          praise: '찬양은 형편이 좋을 때만 하는 것이 아닙니다. 오히려 어려울 때 드리는 찬양이 우리의 시선을 문제에서 하나님께로 돌려놓아, 상황을 새롭게 볼 수 있게 합니다.',
+          hope: '소망은 낙관주의와 다릅니다. "다 잘 될 거야"가 아니라, "하나님이 함께하시니 어떤 결과든 괜찮다"는 고백입니다. 이 말씀은 그 소망의 근거를 제시합니다.',
+          salvation: '구원은 한 번의 사건이 아니라 매일 경험하는 은혜입니다. 죄에서, 두려움에서, 절망에서 건져내시는 하나님의 손길이 오늘도 우리에게 닿아 있습니다.',
+          peace: '세상이 주는 평안은 조건부이지만, 하나님이 주시는 평안은 환경을 초월합니다. 폭풍 속에서도 예수님이 함께 계신 배 안은 안전합니다.',
+          healing: '하나님의 치유는 증상만 없애는 것이 아니라 존재 전체를 회복시키는 것입니다. 몸의 아픔, 마음의 상처, 관계의 깨어짐까지 — 그분은 온전한 회복을 원하십니다.',
+          prayer: '기도는 하나님을 변화시키는 것이 아니라, 기도하는 우리가 변화되는 통로입니다. 동시에 하나님은 우리의 간절한 기도에 반드시 응답하시는 분이십니다.',
+          wisdom: '세상의 지혜는 "어떻게 하면 성공할까"를 묻지만, 하나님의 지혜는 "어떻게 하면 옳은 것인가"를 묻습니다. 이 말씀은 참된 지혜의 출발점이 하나님을 경외하는 것임을 알려줍니다.',
+          promise: '하나님이 하신 약속은 한 번도 깨어진 적이 없습니다. 시간이 걸리더라도, 방법이 다르더라도, 결국 이루십니다. 이것이 우리가 신뢰할 수 있는 근거입니다.',
+          serve: '예수님은 섬김을 통해 하나님 나라의 질서를 보여주셨습니다. 높아지려는 것이 아니라 낮아지려는 것, 받으려는 것이 아니라 주려는 것이 하나님 나라의 원리입니다.',
+          judgment: '하나님의 심판은 파괴가 아니라 바로잡음입니다. 사랑하기에 잘못된 길에서 돌이키라 경고하시는 것이며, 그 경고를 들을 수 있는 것 자체가 은혜입니다.',
+        };
+        p += (interps[cat] || '') + ' ';
+      } else {
+        // Sub-themes - brief
+        p += `또한 ${tv.num}절 "${tv.text.substring(0,50)}${tv.text.length>50?'...':''}"에서 '${td.name}'의 주제도 발견됩니다. `;
+      }
+    });
+  } else {
+    // No themes detected
+    if(keyVerses[1]) {
+      p += `${keyVerses[1].num}절 "${keyVerses[1].text.substring(0,65)}${keyVerses[1].text.length>65?'...':''}" — 이 구절을 천천히 다시 읽어보세요. 하나님이 이 말씀을 통해 무엇을 말씀하시는지, 지금 나에게 어떤 의미인지 묵상해 봅니다.`;
+    } else {
+      p += `이 말씀 전체를 천천히 읽으며 하나님의 마음을 느껴보세요. 어떤 구절에서 마음이 멈추는지, 그 구절이 왜 나에게 와닿는지 생각해 봅니다.`;
+    }
+  }
+
+  // 3. 적용(Application) - 나의 삶에 어떻게 적용할 것인가
+  p += `\n\n<b>🪞 적용 — 나에게 묻는 질문</b>\n`;
+
+  // Personal reflection questions based on top theme
+  if(topThemes.length > 0 && themeData[topThemes[0]]) {
+    p += `오늘 이 말씀을 읽으며 스스로에게 물어보세요: ${themeData[topThemes[0]].reflect} 생각해 보세요.\n\n`;
+  }
+
+  // Practical application based on last key verse
+  const lastKV = keyVerses[keyVerses.length-1];
+  if(lastKV) {
+    p += `💬 오늘의 핵심 말씀: "${lastKV.text.substring(0,80)}${lastKV.text.length>80?'...':''}" (${lastKV.num}절)\n`;
+  }
+
+  // Concrete action suggestions (rotates based on chapter)
+  const actions = [
+    '이 말씀 중 마음에 와닿는 한 구절을 골라, 오늘 하루 세 번 되뇌어 보세요.',
+    '이 말씀에서 받은 은혜를 오늘 만나는 한 사람에게 나눠보세요.',
+    '이 말씀을 메모장에 적어두고, 점심시간에 다시 한 번 읽어보세요.',
+    '이 말씀 속 인물의 입장이 되어, 내가 그 상황이라면 어떻게 했을지 생각해 보세요.',
+    '이 말씀을 소리 내어 천천히 읽어보세요. 눈으로 읽을 때와 다른 감동이 올 수 있습니다.',
+    '오늘 이 말씀에서 발견한 하나님의 성품 한 가지를 기도 노트에 적어보세요.',
+    '이 말씀과 연결되는 나의 경험이 있는지 떠올려 보고, 그때 하나님이 어떻게 일하셨는지 감사해 보세요.',
+    '이 말씀을 카톡 상태메시지나 메모에 적어, 하루 동안 마음에 새기세요.',
+    '잠들기 전 오늘 이 말씀이 나의 하루에 어떤 영향을 미쳤는지 돌아보세요.',
+    '이 말씀을 가족이나 셀 모임에서 나눌 수 있도록, 핵심 내용을 한 문장으로 정리해 보세요.',
   ];
-  p += closings[ch.ch % closings.length] + ' 🙏';
+  p += `\n✏️ 실천: ${actions[(ch.ch + ch.gi) % actions.length]}`;
 
   return p;
 }
@@ -330,11 +793,12 @@ function goHome(){
   showPage('home');
   chapter=getChapter();
   const h=getHistory();
-  document.getElementById('home-chapter').textContent=chapter.ko+' '+chapter.ch+'장';
-  document.getElementById('home-book-progress').textContent=chapter.ko+' '+chapter.ch+'/'+chapter.tc+'장';
-  document.getElementById('home-total-progress').textContent=(chapter.gi+1)+' / '+TOTAL;
+  // 표지에는 구절 표시 안 함
+  document.getElementById('home-chapter').textContent='오늘의 묵상';
+  document.getElementById('home-book-progress').textContent='';
+  document.getElementById('home-total-progress').textContent='';
   document.getElementById('home-progress-bar').style.width=((chapter.gi+1)/TOTAL*100)+'%';
-  if(h.length>0)document.getElementById('home-streak').textContent='🔥 '+h.length+'일 기도 완료';
+  
   // Always show start button
   document.getElementById('home-start').style.display='block';
   document.getElementById('home-done').style.display='none';
@@ -350,18 +814,30 @@ function getUserName(){
   return name;
 }
 
+let claudeMeditation = '';
+
+// GPT-4o-mini로 사전 생성된 4~6월 묵상 (하드코딩)
+const PRE_MEDITATIONS = {"4-1": "요한복음 18장 39절에서 19장 16절까지의 말씀은 예수님께서 빌라도 앞에서 재판을 받으시는 장면을 담고 있습니다. 역사적으로 이 시기는 유대 사회가 로마 제국의 지배 아래에 있을 때로, 유대인들은 메시아의 도래를 간절히 기다리고 있었지만, 정작 그들이 원하는 메시아는 예수님과는 달랐습니다. 빌라도는 민중의 압력에 굴복하여 예수님을 십자가에 못 박도록 결정하는데, 이는 인간의 연약함과 두려움을 여실히 드러냅니다. 현대를 살아가는 우리 역시 주변의 시선과 압박 속에서 진리를 외면하고 부당한 선택을 할 때가 많습니다. 그러나 예수님은 이러한 상황 속에서도 침착하게 자신의 사명을 완수하셨고, 이는 우리에게 큰 위로가 됩니다. 예수님의 고난과 희생은 우리의 죄를 사하시기 위한 것이었고, 그 사랑은 결코 변치 않습니다. 이 말씀을 통해 우리는 어려움 속에서도 끊임없이 하나님의 뜻을 찾고, 주님의 사랑을 의지하며 살아가야 함을 다시금 깨닫게 됩니다. 하나님, 저희가 세상의 소리에 휘둘리지 않게 하시고, 예수님의 고난을 기억하며 더욱 깊이 있는 믿음으로 나아가게 하소서. 우리 마음 속에 주님의 사랑이 가득하길 기도합니다. 아멘.", "4-2": "요한복음 19장 30절에서 42절은 예수님의 십자가에서의 마지막 순간을 기록하고 있습니다. '다 이루었다'라는 예수님의 선언은 인류를 위한 구원의 사역이 완성되었음을 의미합니다. 역사적으로 이 사건은 구약의 제사 시스템을 완전히 대체하며, 하나님과의 관계 회복의 기초가 되었습니다. 오늘날 우리는 이 말씀을 통해 우리의 죄와 연약함을 고백하고, 예수님이 이루신 구원의 은혜를 깊이 체험할 수 있습니다. 삶의 여러 고난 속에서도 이 말씀은 우리에게 희망과 위안을 줍니다. 예수님이 우리를 위해 모든 것을 다 이루셨기에, 우리는 더 이상 우리의 노력이나 자격으로 하나님의 사랑을 얻으려 하지 않아도 됩니다. 대신 우리는 그 사랑을 믿고 의지하며, 매일의 삶에서 하나님의 은혜를 누릴 수 있습니다. 이 시간, 우리의 마음을 열고 주님께 나아갑니다. 주님, 저희가 예수님의 완전한 사랑과 구원의 메시지를 깊이 깨달아, 그 은혜 안에서 주님과 더욱 가까워지게 하소서. 아멘.", "4-3": "요한복음 20장 1절에서 18절은 부활의 기쁨과 인간의 회복을 다루는 감동적인 이야기입니다. 이 장면은 예수님이 십자가에 달려 죽으신 후, 마리아 막달레나가 무덤을 찾아갔을 때 시작됩니다. 당시 유대 사회에서 여성의 목소리는 종종 무시되었으나, 예수님은 그를 통해 첫 번째로 부활 소식을 전하셨습니다. 이는 예수님이 모든 사람, 특히 소외된 이들을 귀히 여기신다는 강력한 메시지를 전달합니다. 현대 사회에서도 많은 이들이 상실감과 소외감을 느끼고 있습니다. 그 가운데서 하나님의 사랑과 회복이 절실히 필요합니다. 마리아가 예수님의 부활을 만났을 때의 기쁨은 우리에게도 새로운 삶의 가능성을 깨우칩니다. 주님은 우리 각자를 깊이 아시고, 우리의 눈물을 닦아 주시며, 새로운 소망을 주십니다. 이제, 주님, 우리의 마음이 상한 곳을 치유하시고 새로운 부활의 소망으로 채워 주시기를 기도합니다. 우리 각자의 삶에서 부활의 능력을 경험하게 하소서.", "4-4": "요한복음 20장 19절부터 31절은 부활한 예수님이 제자들에게 나타나시고, 불신하는 도마에게도 직접 나타나시는 사건을 담고 있습니다. 이 본문은 제자들이 두려움에 떨고 있는 상황 속에서 시작됩니다. 예수님은 그들에게 평화를 선언하며, 자신의 상처를 보여줌으로써 부활의 확실성을 증명하십니다. 제자들의 두려움은 우리의 삶에서도 많이 느끼는 감정입니다. 현대 사회도 불확실성과 두려움으로 가득 차 있습니다. 그러나 예수님의 부활은 우리에게 새로운 희망과 강력한 위로가 됩니다. 우리는 도마처럼 의심할 때도 있지만, 그 의심 속에서도 예수님은 우리에게 다가와 주십니다. 이 말씀은 우리에게 절망 속에서도 하나님이 함께하신다는 약속을 일깨워 줍니다. 이제 우리의 불신과 의심을 주님께 내려놓고, 그분의 평화를 누릴 수 있도록 기도합니다. 주님, 우리의 마음을 주님께 열어 보이며, 믿음의 눈으로 주님을 바라보게 해 주시옵소서.", "4-5": "요한복음 21장 1절부터 14절은 부활 후 예수님이 제자들에게 나타나신 장면을 담고 있습니다. 이 사건은 예수님이 제자들과의 관계를 회복하고 그들의 사명을 재확인하는 중요한 순간입니다. 역사적으로 제자들은 예수님의 죽음과 부활을 경험한 후 혼란과 두려움 속에 있었고, 다시 고향인 갈릴리로 돌아가 어부의 삶을 선택했습니다. 이때 예수님은 그들의 고된 밤 새 노동을 아시고, 그들에게 그물에 많은 물고기를 잡게 하여 그들의 마음을 다시 일으켜 주십니다. 현대의 우리 또한 삶의 어려움과 고난 속에서 방향을 잃거나 지쳐 있을 때가 많습니다. 그럴 때 우리는 예수님의 부활의 힘과 그가 우리와 함께하신다는 사실을 기억해야 합니다. 예수님은 언제나 우리 곁에 계셔서 우리의 수고를 아시고, 새로운 가능성을 보여 주십니다. 이 말씀을 통해 우리는 그분의 음성을 듣고, 다시 일어설 용기를 얻어야 합니다. 주님, 우리에게 당신의 부활의 능력을 새롭게 하시고, 언제나 함께 하신다는 믿음을 주옵소서. 우리가 낚시의 고기처럼 삶의 소중한 열매를 누릴 수 있도록 인도해 주시기를 기도합니다. 아멘.", "4-6": "요한복음 21장 15절에서 25절은 예수님께서 부활 후 제자들에게 나타나신 사건을 담고 있습니다. 이 장면에서 예수님은 베드로에게 \"내 양을 치라\"는 말씀을 하시며 그를 다시 세우십니다. 역사적으로, 이 말씀은 부활의 확신과 사명의 회복을 상징합니다. 베드로는 예수님을 세 번 부인한 후, 다시 양을 맡게 됨으로써 하나님의 은혜와 용서를 경험하게 됩니다. 현대의 우리도 때로는 실수와 연약함 속에서 주춤할 때가 있지만, 주님은 우리에게 다시 일어설 기회를 주십니다. 우리가 부름받은 자리에서 그리스도의 사랑을 전하고, 믿음의 공동체를 돌보는 것은 각자에게 주어진 소명입니다. 이러한 사역은 결코 혼자가 아니라, 성령과 함께하는 동행임을 잊지 말아야 합니다. 오늘도 주님께서 우리를 부르시고 함께하신다는 사실이 우리의 마음을 따뜻하게 하고 위로가 됩니다. 주님, 저희가 주님의 양을 잘 돌볼 수 있도록 인도해 주시고, 매일의 삶 속에서 주님의 사랑을 실천하게 도와주시옵소서. 아멘.", "4-7": "창세기 21장 1절에서 7절은 아브라함과 사라가 오랜 기다림 끝에 이삭을 낳는 기적적인 순간을 담고 있습니다. 이 사건은 단순히 한 가정의 기쁨을 넘어서, 하나님의 약속이 어떻게 이루어지는지를 보여줍니다. 당시 아브라함과 사라는 나이가 많았고, 자녀를 갖는 것이 불가능해 보였지만, 하나님은 그들의 믿음과 인내를 통해 자신의 계획을 성취하셨습니다. 현대 사회에서도 우리는 종종 인생의 도전과 불확실성에 직면하게 됩니다. 그러나 이 말씀은 우리에게 하나님의 시간은 우리의 시간과 다를 수 있으며, 그분의 약속은 결코 실패하지 않는다는 확신을 줍니다. 우리는 하나님이 우리에게 주신 희망과 꿈을 믿고, 신뢰하며 기다려야 합니다. 이삭의 이름이 '웃음'이라는 사실은 그들의 슬픔이 기쁨으로 바뀌었음을 상징적으로 표현합니다. 우리 삶 속에서도 하나님께서 주신 작은 기적들을 발견하고, 그 안에서 깊은 감사의 마음을 가질 수 있기를 소망합니다. 주님, 우리의 삶 속에서 당신의 약속을 바라보며 기다릴 수 있는 믿음을 주시고, 주님이 주시는 기쁨이 언제나 우리의 삶을 가득 채우게 하소서. 아멘.", "4-8": "창세기 22장 1절에서 19절까지는 아브라함이 그의 아들 이삭을 하나님께 제물로 바치라는 명령을 받는 사건을 다루고 있습니다. 이 사건은 아브라함의 믿음과 순종을 시험하는 시험이었으며, 당시 고대 사회에서는 신의 뜻을 따르는 것이 매우 중요시되었습니다. 아브라함은 사랑하는 아들을 바치는 극한의 상황 속에서도 하나님의 명령에 순종함으로써, 그의 믿음은 더욱 깊어졌습니다. 오늘날 우리는 종종 삶의 고난과 시험 속에서 하나님의 뜻을 이해하기 어려울 때가 많습니다. 하지만 아브라함의 이야기는 우리에게 믿음이란 단지 약속을 믿는 것이 아니라, 때로는 고통과 희생을 동반하는 깊은 순종임을 일깨워 줍니다. 힘겨운 상황에서도 하나님을 신뢰하며 나아가는 우리의 모습이 필요합니다. 위로가 필요할 때, 아브라함처럼 믿음으로 나아가는 것이 하나님께 우리의 진정한 순종임을 기억합시다. 이 시간, 우리의 삶 속에서 하나님의 뜻을 이루어달라고 기도하며, 그분의 사랑과 인도하심에 의지하는 마음을 새롭게 하기를 소망합니다. 주님, 우리의 믿음이 더욱 깊어지게 하시고, 어려운 시기에 당신의 놀라운 계획을 신뢰하게 하소서.", "4-9": "창세기 23장 1절부터 20절까지의 말씀은 사라의 죽음과 아브라함이 그녀를 위해 매장지를 구입하는 과정에 대한 이야기입니다. 이 장은 고대 근동 사회에서 가족과 조상의 중요성을 잘 보여줍니다. 아브라함은 그의 사랑하는 아내인 사라를 위한 땅을 확보하며, 그녀를 향한 깊은 사랑과 존경을 표현합니다. 이 사건은 아브라함이 하나님의 약속을 지키기 위해 고향을 떠난 지 많은 세월이 지난 후에도 조상의 땅을 소유하고자 하는 그의 소망을 나타냅니다. 현대 사회에서도 우리는 사랑하는 이들의 상실을 경험하며, 그들과의 소중한 기억을 간직하고 싶어 합니다. 하나님께서는 우리에게 상실의 아픔을 경험할 때 그 아픔을 이기고 위로를 받을 수 있는 방법을 제공하십니다. 아브라함이 사라의 묘지를 기념하는 것처럼, 우리는 또한 사랑하는 이들을 기억하고 그들의 삶을 기리는 시간을 가질 수 있습니다. 이러한 기억은 우리가 그들의 사랑을 이어가고, 그들에게서 배운 진리와 가치를 삶 속에서 실천하게 합니다. 주님, 우리의 상실을 위로하시고, 사랑하는 이들을 기억하며 그들의 삶을 기리는 지혜를 허락해 주시옵소서.", "4-10": "창세기 24장 1절에서 27절은 아브라함의 종이 이삭을 위한 아내를 찾기 위해 멀리 떠나는 이야기를 담고 있습니다. 이 시기는 아브라함이 하나님께 약속받은 땅에서 안정된 삶을 이루고, 그의 후손에게 그 축복을 전하고자 하는 중요한 시점이었습니다. 종은 아브라함의 명령을 충실히 이행하며, 하나님께 기도함으로써 그 길을 인도해 줄 지혜를 구합니다. 이는 우리에게도 기도의 중요성과 하나님께 의지하는 삶의 모델을 제시합니다. 현대의 우리에게도 삶의 중요한 결정을 내릴 때 하나님의 인도를 구하는 것이 얼마나 중요한지 일깨워 줍니다. 아브라함의 종처럼, 우리는 매일의 삶 속에서도 하나님의 인도하심을 필요로 하며, 믿음으로 나아갈 때 그분은 우리가 가야 할 길을 알려 주십니다. 이러한 신뢰와 순종 속에서 우리는 하나님의 계획을 발견하고, 삶의 의미를 더욱 깊이 있게 경험할 수 있습니다. 하나님, 우리가 당신의 뜻을 구하고, 삶의 길을 따라 걸어갈 수 있도록 인도해 주옵소서. 아멘.", "4-11": "창세기 24장 28절에서 67절은 아브라함의 종이 이삭을 위해 리브가를 찾아가는 이야기로, 하나님의 인도하심과 믿음의 중요성을 보여줍니다. 이삭이 리브가를 맞이하는 장면은 단순한 결혼의 연례행사로 보일 수 있지만, 이는 믿음의 공동체가 하나님께서 예비하신 사람과 만나는 귀한 순간임을 상기시킵니다. 역사적으로 이 구절은 하나님이 자신의 계획을 이루기 위해 어떻게 세상을 움직이시는지를 보여줍니다. 현대 사회에서도 우리는 삶의 중요한 결정, 특히 배우자 선택에 있어 하나님의 인도를 구하는 것이 중요합니다. 리브가가 자신의 가족과 고향을 떠나는 모습은 믿음의 여정에서 우리가 때로는 익숙한 것을 포기해야 함을 가르쳐 줍니다. 또, 이삭이 리브가를 사랑하고 아내로 맞이하는 장면은 성경에서 사랑의 깊이와 헌신을 보여줍니다. 우리 각자에게도 하나님께서 준비하신 인연이 있고, 그 인연을 통해 하나님께서 주시는 축복을 누릴 수 있도록 기도해야 합니다. 이 말씀을 통해 사랑과 인도의 하나님을 묵상하고, 우리의 삶 속에서도 그분의 계획을 신뢰하며 따를 수 있는 지혜를 구합니다. 주님, 우리의 삶 속에서 당신의 인도를 깨닫게 하시고, 우리가 만나는 모든 관계 속에서 당신의 사랑을 경험하게 하소서.", "4-12": "창세기 25장 1절에서 18절까지의 말씀은 아브라함의 생애 마지막 부분을 다루고 있으며, 그가 다시 아내를 맞아 이삭의 자손을 잇는 과정을 보여줍니다. 아브라함은 사라를 잃은 슬픔 후에도 삶을 이어가며 새로운 삶을 시작하는 모습을 통해, 하나님께서 우리의 상실 속에서도 계속해서 새로운 시작을 허락하신다는 사실을 일깨워 줍니다. 역사적으로 아브라함은 믿음의 조상으로서 후손들에게 하나님의 약속을 계승할 책임이 있었습니다. 현대 사회에서 우리는 상실과 변화 속에서도 하나님께서 주시는 새로운 기회와 사명을 붙들어야 합니다. 아브라함이 다시 시작한 것처럼, 우리도 하나님과의 관계 속에서 회복과 재생의 은혜를 경험할 수 있습니다. 이러한 말씀은 우리에게 상실이 끝이 아니라 새로운 출발의 시작이 될 수 있다는 따뜻한 위로를 줍니다. 우리는 하나님께서 우리 삶의 모든 순간에 동행하신다는 믿음을 가지고 매일을 살아가야 합니다. 기도하겠습니다. 사랑의 하나님, 우리의 상실과 아픔 속에서도 당신의 위로와 새로움을 누릴 수 있도록 도와주세요. 우리의 삶이 당신의 뜻 가운데서 회복되고 새롭게 되기를 기도합니다. 예수님의 이름으로 기도드립니다. 아멘.", "4-13": "창세기 25장 19절에서 34절은 이삭과 리브가의 아들들, 에서와 야곱의 이야기를 담고 있습니다. 이 사건은 고대 이스라엘 사회에서의 가족의 중요성과 더불어 하나님의 선택의 신비를 보여줍니다. 에서는 외적으로 매력적인 인물로, 사냥을 통해 아버지 이삭의 사랑을 받으려 했지만, 야곱은 내적 가치와 하나님의 뜻을 따르기 위해 노력했습니다. 현대 사회에서도 우리는 외적인 성공과 인정에 집착하기 쉽습니다. 하지만 하나님은 우리의 내면을 보시며, 진정한 관계와 신뢰를 원하십니다. 에서의 즉흥적인 결정은 결국 장자의 권리를 잃게 만들었고, 이는 우리에게 순간의 유혹에 빠지지 말라는 교훈을 줍니다. 우리는 종종 세상의 기준에 따라 선택하지만, 하나님은 우리 각자의 삶에 대한 계획을 가지고 계십니다. 하나님께서 우리를 특별히 선택하셨다는 사실을 기억하며, 주님께 의지하는 삶을 살아가기를 바랍니다. 주님, 우리의 마음을 깨우쳐 주시고, 주님이 원하시는 길로 나아가게 하소서. Amen.", "4-14": "창세기 25장 19절에서 34절은 이삭과 리브가의 아들들, 에서와 야곱의 이야기를 담고 있습니다. 이 사건은 고대 이스라엘 사회에서의 가족의 중요성과 더불어 하나님의 선택의 신비를 보여줍니다. 에서는 외적으로 매력적인 인물로, 사냥을 통해 아버지 이삭의 사랑을 받으려 했지만, 야곱은 내적 가치와 하나님의 뜻을 따르기 위해 노력했습니다. 현대 사회에서도 우리는 외적인 성공과 인정에 집착하기 쉽습니다. 하지만 하나님은 우리의 내면을 보시며, 진정한 관계와 신뢰를 원하십니다. 에서의 즉흥적인 결정은 결국 장자의 권리를 잃게 만들었고, 이는 우리에게 순간의 유혹에 빠지지 말라는 교훈을 줍니다. 우리는 종종 세상의 기준에 따라 선택하지만, 하나님은 우리 각자의 삶에 대한 계획을 가지고 계십니다. 하나님께서 우리를 특별히 선택하셨다는 사실을 기억하며, 주님께 의지하는 삶을 살아가기를 바랍니다. 주님, 우리의 마음을 깨우쳐 주시고, 주님이 원하시는 길로 나아가게 하소서. Amen.", "4-15": "창세기 26장 1절부터 16절까지의 말씀은 이삭이 가나안 땅에서 기근을 만나지만 여호와의 인도하심을 따라 블레셋 땅으로 가는 과정을 보여줍니다. 이삭은 아버지 아브라함의 발자취를 따라 하나님께서 그에게 약속하신 땅을 바라보며 신뢰를 잃지 않습니다. 역사적으로 이 시기는 아브라함의 후손들이 약속된 땅에서 하나님의 인도를 받으며 살아가는 중요한 시점이었습니다. 현대의 우리도 삶의 고난과 기근을 경험할 때가 많습니다. 그럴 때마다 하나님은 우리에게 신뢰와 순종을 요구하시며, 그분의 약속을 기억하라고 말씀하십니다. 이삭처럼 우리가 하나님 앞에서 기도하며 그분의 뜻을 찾고, 때로는 외부의 압박과 두려움 속에서도 믿음을 지켜나가야 합니다. 이 말씀은 하나님이 우리를 결코 버리지 않으시고, 그분의 계획 속에서 모든 것을 이루신다는 따뜻한 위로를 줍니다. 오늘도 우리가 처한 상황이 어떠하든지 하나님께 나아가며 그분의 인도하심을 신뢰하게 하소서. 기도하겠습니다. 사랑의 하나님, 우리의 마음을 다해 당신을 의지하며, 우리의 삶 속에서 당신의 주권을 인정하게 하여 주옵소서. 아멘.", "4-16": "창세기 26장 17절에서 35절은 이삭의 삶과 하나님의 축복이 어떻게 그의 삶에 영향을 미쳤는지를 보여줍니다. 이삭은 기근의 위험 속에서도 하나님께서 약속하신 땅에 머물며, 갈대나무를 파는 불모의 땅에서 축복을 경험합니다. 이 장면은 우리가 힘든 상황에서도 하나님을 신뢰하고 그분의 인도하심을 따를 때, 놀라운 결실을 맺을 수 있음을 일깨워 줍니다. 현대 사회에서도 우리는 다양한 갈등과 시련 속에 놓여 있습니다. 하지만 이삭처럼 하나님의 약속을 기억하고, 주변의 반대와 어려움에도 불구하고 그분의 인도하심을 기다린다면, 우리의 삶에도 동일한 축복이 임할 것입니다. 이삭이 우물을 파고 그곳에 이름을 짓는 모습은 우리가 삶의 각 순간에 하나님께서 주신 은혜를 기억하고 감사하는 태도를 가져야 함을 알려줍니다. 하나님은 우리의 수고를 보시고, 우리에게 필요한 것을 채우시는 분임을 잊지 말아야 합니다. 오늘도 우리에게 축복의 우물을 새롭게 파고, 하나님께서 주신 은혜를 누리도록 도와주십시오. 아멘.", "4-17": "창세기 27장 1절에서 29절의 말씀은 이삭과 그의 아들들, 특히 에서와 야곱 간의 복잡한 관계를 다룹니다. 이삭은 나이가 많아 시력이 어두워지자, 에서에게 그의 사랑하는 음식을 준비하라고 명령합니다. 그러나 리브가는 하나님의 뜻을 이루기 위해 야곱에게 축복을 받을 수 있는 기회를 제공합니다. 이러한 이야기는 인간의 연약함과 하나님의 섭리를 동시에 보여줍니다. 현대 사회에서도 우리는 가족 간의 갈등과 선택의 순간을 맞닥뜨리며, 이삭처럼 종종 우리의 지혜만으로 문제를 해결하려 하곤 합니다. 하지만 이 말씀은 그럼에도 불구하고 하나님의 계획이 우리 삶 속에서 어떻게 이루어지는지를 상기시킵니다. 우리가 어떤 상황에 처하더라도, 하나님은 전능하신 분으로서 우리의 실수와 결정을 통해서도 그분의 뜻을 이루실 수 있음을 믿어야 합니다. 그러므로 오늘 우리도 하나님 앞에 겸손히 나아가 그분의 인도하심을 구하며, 사랑으로 가득한 마음으로 가족을 대하는 삶을 살기를 소망합니다. 주님, 우리의 연약함을 아시고, 갈등 속에서도 그분의 뜻을 신뢰하며 살아갈 수 있도록 도와주소서. 아멘.", "4-18": "창세기 27장 30절에서 46절은 이삭의 축복이 야곱에게 넘어가는 과정과 그로 인해 발생하는 갈등을 보여줍니다. 이삭은 나이가 들고 시력을 잃으면서, 자신의 장자인 에서에게 축복을 주고자 했지만, 야곱의 교활한 계략으로 인해 그 축복은 엉뚱한 쪽으로 흘러갔습니다. 이 사건은 단순히 가족 간의 갈등을 넘어서, 하나님의 주권과 섭리를 드러내는 중요한 순간입니다. 현대 사회에서 우리는 종종 자신의 욕망이나 의도를 이루기 위해 수단과 방법을 가리지 않는 경우가 있습니다. 그러나 하나님은 우리 각자의 삶의 여정 속에서, 때로는 복잡하고 이해할 수 없는 방법으로 자신의 계획을 이루어 가십니다. 우리는 이 이야기를 통해 하나님께서 우리의 실수와 잘못을 사용하실 수 있다는 것을 깨닫고, 그분의 의도를 신뢰할 수 있습니다. 힘든 시간 속에서도 하나님의 사랑과 은혜는 변하지 않으며, 우리는 그분의 손길로 새롭게 일어설 수 있는 희망을 가질 수 있습니다. 우리 각자의 삶에서 하나님의 뜻을 찾고 그 길을 따르도록 함께 기도합시다. 하나님, 우리의 연약함과 실수를 통해서도 당신의 뜻을 이루어주심에 감사드립니다. 우리가 언제나 당신의 인도하심을 신뢰할 수 있도록 도와주시고, 서로 사랑하며 화해하는 삶을 살게 하소서. 아멘.", "4-19": "창세기 28장 1절에서 9절은 야곱이 이삭의 축복을 받고, 그의 어머니의 고향인 하란으로 떠나는 장면을 담고 있습니다. 이 시기는 아브라함의 후손들이 약속의 땅에서 삶을 이어가는 중대한 순간이었습니다. 야곱은 형 에서와의 갈등 속에서 하나님께서 주신 약속을 떠안고 새로운 여정에 나서야 했습니다. 이 말씀에서 우리는 하나님의 인도하심과 축복의 필요성을 깊게 느낄 수 있습니다. 현대 사회에서도 우리는 종종 갈등과 불확실성 속에서 새로운 길을 선택해야 하는 순간들을 맞이합니다. 이럴 때 하나님의 말씀과 축복이 우리의 삶의 길잡이가 되어 주신다는 것을 기억해야 합니다. 하나님은 우리 각자의 여정 속에서도 함께 하시며, 우리가 어떤 선택을 하든지 그분의 사랑과 은혜는 언제나 변하지 않습니다. 힘들고 두려운 마음을 가진 우리에게, 하나님께서 주시는 평안과 위로가 필요합니다. 오늘도 우리는 그분의 인도하심을 신뢰하며, 기도합니다. 하나님, 우리의 삶의 길을 인도하시고, 언제나 함께하시는 주님을 의지하게 하소서.", "4-20": "창세기 28장 10절에서 22절은 야곱이 베델에서 경험한 꿈과 하나님의 약속을 담고 있습니다. 이 사건은 야곱이 형 에서의 분노를 피해 외롭게 떠나는 여정 중에 일어난 것입니다. 당시의 상황에서 야곱은 자신의 미래에 대한 불안과 두려움을 안고 있었지만, 하나님은 그에게 하늘과 땅을 연결하는 사다리를 통해 위로와 약속을 주셨습니다. 이처럼 우리의 인생에서도 불확실함과 고난이 있을 때, 하나님은 언제나 우리 곁에 계시며, 우리가 어디에 있든지 그의 임재를 경험할 수 있습니다. 하나님은 야곱에게 '너를 떠나지 않겠다'고 약속하셨는데, 이는 오늘날 우리에게도 그대로 적용되는 말씀입니다. 우리는 종종 혼자라고 느낄 때가 많지만, 하나님은 우리가 어떤 상황에 있든지 항상 함께하시며, 우리를 지키고 인도하십니다. 이러한 진리를 기억하며, 우리가 힘들고 외로운 순간에도 하나님께 마음을 열고 그분의 약속을 붙잡을 수 있기를 바랍니다. 주님, 우리의 삶 속에서 항상 함께하시는 주님의 은혜를 깨닫게 하시고, 어려운 순간에도 믿음을 잃지 않게 하소서. Amen.", "4-21": "창세기 28장 10절에서 22절은 야곱이 베델에서 경험한 꿈과 하나님의 약속을 담고 있습니다. 이 사건은 야곱이 형 에서의 분노를 피해 외롭게 떠나는 여정 중에 일어난 것입니다. 당시의 상황에서 야곱은 자신의 미래에 대한 불안과 두려움을 안고 있었지만, 하나님은 그에게 하늘과 땅을 연결하는 사다리를 통해 위로와 약속을 주셨습니다. 이처럼 우리의 인생에서도 불확실함과 고난이 있을 때, 하나님은 언제나 우리 곁에 계시며, 우리가 어디에 있든지 그의 임재를 경험할 수 있습니다. 하나님은 야곱에게 '너를 떠나지 않겠다'고 약속하셨는데, 이는 오늘날 우리에게도 그대로 적용되는 말씀입니다. 우리는 종종 혼자라고 느낄 때가 많지만, 하나님은 우리가 어떤 상황에 있든지 항상 함께하시며, 우리를 지키고 인도하십니다. 이러한 진리를 기억하며, 우리가 힘들고 외로운 순간에도 하나님께 마음을 열고 그분의 약속을 붙잡을 수 있기를 바랍니다. 주님, 우리의 삶 속에서 항상 함께하시는 주님의 은혜를 깨닫게 하시고, 어려운 순간에도 믿음을 잃지 않게 하소서. Amen.", "4-22": "창세기 29장 1절부터 14절까지의 말씀은 야곱이 하란으로 향하는 여정과 그곳에서 그의 삼촌 라반을 만나게 되는 이야기를 담고 있습니다. 이 구절은 가족과의 재회, 새로운 시작, 그리고 하나님의 계획 속에서 일어나는 사건들을 보여줍니다. 야곱은 부친 이삭과 형 에서에게서 도망치며 불안한 마음으로 하란에 도착했지만, 그곳에서 그의 인생을 바꿀 만남을 경험하게 됩니다. 이러한 만남은 단순한 육체적 재회의 차원을 넘어 하나님께서 그의 삶에 어떻게 일하고 계시는지를 깨닫게 해줍니다. 오늘날 우리도 삶의 불확실성과 고난 속에서 하나님이 예비하신 만남과 기회를 기대할 수 있습니다. 또한, 주님은 우리를 외롭게 하지 않으시며, 필요할 때마다 우리에게 힘을 주시고 동행해 주십니다. 그러므로 우리는 삶의 여정 속에서 주님의 인도하심을 신뢰하며 그분의 사랑과 계획을 바라보아야 합니다. 하나님, 저의 삶의 여정에서도 주님의 뜻을 듣고 따르게 하여 주시고, 저를 통해 나타나실 당신의 놀라운 계획을 기대하게 하옵소서. 아멘.", "4-23": "창세기 29장 15절에서 30절의 말씀은 야곱이 그의 외삼촌 라반에게서 일하며 사랑하는 라헬을 얻기 위해 7년간의 긴 시간을 기다리는 이야기입니다. 이 구절은 단순히 사랑과 노동의 대가를 넘어서, 인내와 헌신, 그리고 인간관계의 복잡함을 보여줍니다. 야곱은 라헬을 사랑했기에 7년이 길지 않게 느껴졌다고 하지만, 결국 그가 원하는 라헬 대신 레아와 결혼하게 되는 아이러니는 우리의 인생에서도 예기치 못한 전개를 의미할 수 있습니다. 현대의 우리는 꿈과 계획을 가지고 나아가지만, 때로는 생각지 못한 길로 인도받기도 합니다. 이런 불확실성과 갈등 속에서도 하나님은 우리의 삶을 섭리하신다는 사실을 잊지 말아야 합니다. 우리가 겪는 아픔과 어려움 속에서도 하나님은 나의 곁에 계시며, 그분의 시간 안에서 모든 것이 이루어질 것입니다. 오늘도 인생의 여정 속에서 인내할 수 있는 힘과 사랑을 주시는 하나님께 감사드리며, 그분의 뜻에 따라 살아가기를 기도합니다. 주님, 저의 삶의 길을 인도하시고, 주님의 계획을 신뢰하며 나아갈 수 있도록 도와주소서.", "4-24": "창세기 30장 1-24절은 야곱이 그의 아내 레아와 라헬 사이에서 자녀를 두기 위한 갈등과 고뇌를 보여줍니다. 당시 고대 근동 사회에서는 자녀는 축복의 상징이자 가족의 명예와 직결되는 중요한 요소였습니다. 라헬이 아이를 낳지 못하자, 그녀는 자신에게 닥친 창피함과 불안을 하나님께 토로하며, 자신의 여종 빌하를 통해 자녀를 얻으려 합니다. 이러한 모습은 현대 사회에서도 여전히 자녀를 가지지 못한 이들에게 느껴지는 압박감과 고통을 상징적으로 나타냅니다. 우리는 하나님께 기도하며 그분의 뜻을 구할 뿐 아니라, 때로는 우리 주변의 사람들과의 관계 속에서 위로와 격려를 이어가야 합니다. 하나님은 우리의 기도를 들으시고, 고통과 갈등 속에서도 우리에게 필요한 것을 주시는 분임을 기억합시다. 우리가 인생의 어려움 속에서도 신뢰를 잃지 않고, 서로를 위해 기도하며 사랑으로 감싸줄 수 있기를 소망합니다. 사랑의 하나님, 우리의 모든 기도를 들어주시고, 저희의 마음을 평안과 확신으로 채워 주시옵소서.", "4-25": "창세기 30장 25-43절은 야곱이 라반의 집에서 겪은 갈등과 변화를 다룹니다. 야곱은 하나님께서 주신 지혜를 통해 라반의 양 떼를 번성하게 하고, 자신의 가족을 꾸려 나가려 합니다. 이 말씀은 인생에서 겪는 어려움과 갈등 속에서도 하나님의 인도하심이 있음을 보여줍니다. 야곱은 외부의 환경에 의존하기보다는 하나님께서 주신 지혜를 통해 자신의 삶을 개척해 나갔습니다. 현대 사회에서도 우리는 각자의 갈등과 시련에 직면하고 있지만, 이 과정에서 하나님께서 주신 재능과 지혜를 발견하고 활용할 수 있습니다. 우리의 노력과 하나님의 은혜가 어우러질 때, 우리는 예상치 못한 축복을 경험할 수 있습니다. 그럼에도 불구하고 어려운 상황 속에서는 위로가 필요합니다. 하나님은 언제나 우리를 지켜보시고, 우리의 기도를 들으시는 분이십니다. 주님, 오늘도 저희가 어려운 상황 속에서 믿음을 잃지 않도록 도와주시고, 주님의 지혜로 삶의 길을 찾게 하소서.", "4-26": "창세기 31장 1절부터 16절까지의 말씀은 야곱이 라반의 집을 떠나기로 결심하는 상황을 담고 있습니다. 이 배경에는 야곱이 오랜 시간 동안 라반에게 속고 착취당한 경험이 있습니다. 그 과정에서 하나님의 인도하심과 약속이 어떻게 그를 지켜주셨는지를 깨닫게 됩니다. 현대의 우리도 종종 힘든 관계나 환경에서 벗어나고 싶어하지만, 그 과정에서 하나님이 주신 약속을 잊지 말아야 합니다. 야곱은 하나님이 주신 비전을 따라 나아갔고, 그 과정에서 자신의 정체성을 재확인하게 됩니다. 우리도 삶의 어려움 속에서 하나님의 뜻을 찾고, 그분의 인도하심에 의지해야 합니다. 또한, 야곱의 아내들이 그와 함께 도망치기로 결심한 것은 그들이 가진 믿음을 보여줍니다. 이는 우리가 신뢰하는 공동체의 중요성을 일깨워줍니다. 그러므로 우리는 하나님께 우리의 길을 맡기고, 그분의 인도하심을 신뢰하며 나아가야 합니다. 주님, 오늘도 저를 인도해 주시고, 어려운 상황 속에서도 주님의 뜻을 분별할 수 있는 지혜를 주시옵소서. 아멘.", "4-27": "창세기 31장 17-42절은 야곱이 라반의 집을 떠나기 위해 결단하는 장면을 담고 있습니다. 이 배경에서 야곱은 라반과의 관계에서 느꼈던 압박감과 불공정함을 경험하며, 하나님의 인도하심에 따라 새로운 시작을 결심합니다. 현대인인 우리도 때때로 불리한 상황에서 벗어나고자 하는 갈망을 느낍니다. 야곱이 주어진 환경에서 하나님을 의지하며 용기를 내어 떠난 것처럼, 우리도 삶의 어느 순간에 두려움이 앞서더라도 믿음으로 나아가야 합니다. 하나님은 고통의 시간을 지나 새로운 길로 우리를 인도하시는 분이십니다. 그러므로 우리는 언제나 하나님의 뜻을 구하고, 그분의 인도하심을 믿으며 나아가야 합니다. 힘든 결정이 필요할 때마다 하나님께서 주시는 지혜와 위로를 기억하며, 그분의 사랑 안에서 새로운 방향으로 나아가는 우리가 되기를 소망합니다. 주님, 우리 마음에 불안과 두려움이 있을 때, 당신의 평강으로 채워주시고, 언제나 당신의 인도하심을 신뢰하게 하소서. 아멘.", "4-28": "창세기 31장 17-42절은 야곱이 라반의 집을 떠나기 위해 결단하는 장면을 담고 있습니다. 이 배경에서 야곱은 라반과의 관계에서 느꼈던 압박감과 불공정함을 경험하며, 하나님의 인도하심에 따라 새로운 시작을 결심합니다. 현대인인 우리도 때때로 불리한 상황에서 벗어나고자 하는 갈망을 느낍니다. 야곱이 주어진 환경에서 하나님을 의지하며 용기를 내어 떠난 것처럼, 우리도 삶의 어느 순간에 두려움이 앞서더라도 믿음으로 나아가야 합니다. 하나님은 고통의 시간을 지나 새로운 길로 우리를 인도하시는 분이십니다. 그러므로 우리는 언제나 하나님의 뜻을 구하고, 그분의 인도하심을 믿으며 나아가야 합니다. 힘든 결정이 필요할 때마다 하나님께서 주시는 지혜와 위로를 기억하며, 그분의 사랑 안에서 새로운 방향으로 나아가는 우리가 되기를 소망합니다. 주님, 우리 마음에 불안과 두려움이 있을 때, 당신의 평강으로 채워주시고, 언제나 당신의 인도하심을 신뢰하게 하소서. 아멘.", "4-29": "창세기 31장 43절부터 55절까지의 말씀은 야곱과 라반의 갈등을 다루고 있습니다. 이 장면은 고대 근동의 목축 사회에서의 가족 간의 갈등과 약속의 중요성을 잘 보여줍니다. 야곱은 자신의 가족과 재산을 보호하기 위해 라반과의 관계를 정리하며, 두 사람은 서로의 경계를 명확히 하기로 약속합니다. 현대를 살아가는 우리에게도 이 말씀은 갈등 해결과 대화의 중요성을 일깨워줍니다. 우리가 마주치는 다양한 관계에서 서로의 입장을 이해하고 존중하는 자세가 필요합니다. 또한, 이 말씀은 분쟁이 있을 때에도 화해의 길을 모색해야 한다는 따뜻한 위로를 제공합니다. 우리의 삶 속에서도 서로 간의 신뢰와 약속을 지키며 살아가기를 소망합니다. 주님, 저희가 갈등 가운데서도 사랑과 이해로 나아갈 수 있도록 인도해 주시옵소서. 그리고 우리 주위의 모든 관계가 회복될 수 있도록 도와주시길 간구합니다. 아멘.", "4-30": "창세기 32장 1절에서 21절은 야곱이 고향으로 돌아가는 여정 중, 형 에서를 만날 준비를 하며 겪는 내적 갈등과 두려움을 묘사하고 있습니다. 이 본문은 야곱이 과거의 잘못과 그로 인한 두려움에 직면하면서도 하나님께 간구하는 모습에서 깊은 교훈을 줍니다. 역사적으로, 야곱은 형 에서를 속이고 도망친 후 20년 만에 고향으로 돌아오며 그가 저지른 잘못과 마주하는 상황입니다. 현대를 살아가는 우리도 과거의 상처나 죄책감으로 인한 두려움 속에 살아가는 경우가 많습니다. 그러나 하나님은 언제나 우리와 함께하시며, 그 두려움 속에서도 믿음을 잃지 않도록 격려하십니다. 야곱이 하나님께 간절히 기도하던 모습은 우리에게도 기도의 중요성과 하나님의 도움을 구하는 용기를 상기시킵니다. 우리가 어떤 상황에 처해 있더라도, 주님께 나아가 우리의 모든 걱정과 두려움을 맡길 수 있음을 기억합시다. 이제 주님, 우리의 마음속의 두려움을 치유하시고, 과거의 상처를 회복시켜 주시기를 간구합니다. 우리의 발걸음을 인도하시고, 믿음으로 나아갈 수 있는 힘을 주시옵소서. 아멘.", "5-1": "창세기 33장 1절부터 20절은 야곱이 오랜 시간의 갈등 끝에 형 에서를 만나는 장면을 담고 있습니다. 야곱은 자신이 형에게 한 잘못을 깊이 깨닫고 두려움과 떨림 속에서 형을 맞이합니다. 이 만남은 단순한 형제 간의 재회가 아니라, 화해와 용서의 과정을 보여줍니다. 역사적으로, 이들은 각자의 삶 속에서 상처를 안고 있었고, 그 상처를 이겨내고 서로를 받아들이는 모습은 우리에게 깊은 감동을 줍니다. 현대 사회에서도 우리는 갈등과 상처를 안고 살아가며, 그 속에서 용서하고 화해하는 것이 얼마나 어려운지를 잘 알고 있습니다. 야곱의 겸손한 태도와 에서의 따뜻한 환대는 우리에게 진정한 관계 회복의 본보기를 제시합니다. 우리는 서로를 이해하고 용서함으로써 하나님이 원하시는 평화를 이룰 수 있음을 기억해야 합니다. 주님, 우리가 상처를 입힌 이들과의 관계 속에서 용서의 은혜를 경험하게 하시고, 우리의 마음을 부드럽게 하여 진정한 화해의 길로 인도해 주옵소서. 아멘.", "5-2": "창세기 34장 1절에서 7절의 말씀은 야곱의 딸 디나가 세겜에서 겪은 비극적인 사건을 다루고 있습니다. 이 본문은 고대 이스라엘 사회의 가족과 성에 대한 가치관을 반영하며, 당시의 문화적 배경 속에서 여성이 어떻게 취급되었는지를 깊이 있게 보여줍니다. 디나의 이야기는 단순히 개인의 고통이 아니라, 그로 인해 야곱의 가족이 겪는 갈등과 복수의 연쇄를 통해 인간 존재의 연약함과 상처를 드러냅니다. 현대 사회에서도 여전히 여성에 대한 폭력과 불공정한 대우가 존재하며, 우리는 이 말씀을 통해 그러한 현실을 직시하고, 서로를 보호하고 존중하는 공동체를 만들어야 할 사명을 느낍니다. 하나님은 우리 각자의 아픔을 아시고, 우리가 겪는 상처를 통해 더욱 깊은 사랑과 연민을 배우게 하십니다. 오늘 우리의 삶에서도 누군가의 고통에 귀 기울이고, 그들을 위해 기도하며 함께 아파하는 것이 중요합니다. 주님, 우리의 상처를 어루만져 주시고, 서로를 이해하고 사랑할 수 있는 힘을 주옵소서. 아멘.", "5-3": "창세기 35장 1절부터 15절까지의 말씀은 야곱이 하나님께서 명령하신 대로 베델로 돌아가는 과정을 담고 있습니다. 이 말씀은 야곱이 고향을 떠나 외로운 삶을 살던 중, 하나님과의 만남을 통해 새로운 정체성을 찾는 귀한 순간을 보여줍니다. 역사적으로 이 시기는 야곱이 큰 고난과 갈등 속에서 가족을 이루고, 하나님의 약속을 성취해 가는 과정이었습니다. 현대의 우리 역시 삶의 여정에서 여러 가지 시련과 도전을 경험하며, 하나님께서 우리를 향한 뜻을 깨닫고자 애쓰는 모습이 있습니다. 야곱이 베델에서 하나님과 다시 만나고, 그곳에서 새로운 이름과 언약을 받았던 것처럼, 우리도 하나님과의 관계를 통해 새로운 힘과 위로를 발견할 수 있습니다. 삶의 여러 어려움 속에서도 하나님께로 돌아가 그분의 음성을 듣는 것이 중요합니다. 이 말씀은 우리에게 기도의 필요성과 하나님의 인도하심을 다시 한 번 상기시킵니다. 그러므로 오늘 하루도 주님께 나아가길 원합니다. 하나님, 저희가 삶의 여정 속에서 당신의 뜻을 깨닫고, 사랑으로 이끌어 주시기를 기도합니다. Amen.", "5-4": "창세기 35장 16-29절은 야곱의 가족이 베들레헴 근처로 이동하는 과정에서 라헬이 극심한 고통 속에 베냐민을 낳고 결국 생을 마감하는 이야기를 담고 있습니다. 이 사건은 고통과 기쁨이 공존하는 인생의 현실을 우리에게 보여줍니다. 라헬은 오랜 기다림 끝에 아들을 얻었지만, 그 기쁨은 곧 비극으로 이어지고 말았습니다. 이처럼 우리 삶에서도 기대와 불행이 동시에 존재하며, 때로는 소중한 것을 얻기 위해 큰 대가를 치러야 할 때가 있습니다. 하지만 하나님은 이 모든 과정을 통해 우리의 삶 속에 역사하고 계십니다. 현대 사회에서도 많은 이들이 고통과 상실을 경험하며 힘들어하고 있습니다. 그렇지만 우리는 하나님께서 우리와 함께하신다는 사실을 잊지 말아야 합니다. 우리의 슬픔 속에서도 하나님은 위로와 평화를 주시는 분이시며, 그분의 사랑은 결코 사라지지 않습니다. 주님, 우리가 어려움을 겪을 때에도 당신의 손길을 느끼게 하시고, 슬픔 속에서 위로를 찾게 하소서. 주님의 사랑으로 우리를 감싸주시기를 기도합니다.", "5-5": "창세기 36장 1절부터 8절은 에서의 족보와 그의 후손들이 세일 산 지역에 정착한 과정을 기록하고 있습니다. 에서는 야곱의 형으로서 자신의 정체성을 찾기 위해 이방 땅으로 나아갔고, 이는 그가 하나님의 약속을 따라 이스라엘의 조상으로서의 길을 걸어간 야곱과 대조되는 모습입니다. 이 구절은 단순한 족보의 나열처럼 보일 수 있지만, 그 안에는 각 개인과 가정의 삶이 하나님과 연결되어 있다는 깊은 진리가 담겨 있습니다. 현대를 살아가는 우리도 각자의 자리를 찾아가며 고난과 선택의 순간들을 겪습니다. 그 과정에서 때로는 하나님과의 관계가 멀어지는 듯한 느낌을 받을지라도, 하나님은 여전히 우리를 인도하시는 분임을 잊지 말아야 합니다. 에서의 이야기는 우리가 비록 세상의 유혹과 도전 속에서도 신앙의 뿌리를 잃지 않고, 하나님 안에서 진정한 정체성을 발견해야 함을 일깨워 줍니다. 이런 여정 속에서 하나님이 주시는 위로와 평안이 우리의 마음을 채워 주시기를 기도합니다. 주님, 우리의 삶을 이끌어 주시고, 언제나 주님의 뜻을 바라보며 나아갈 수 있도록 도와주소서. 아멘.", "5-6": "창세기 37장 1절에서 11절은 요셉의 이야기의 시작을 알립니다. 이 구절은 요셉이 아버지 야곱의 사랑을 받는 소년으로서의 삶과 형들의 질투를 받는 과정을 보여줍니다. 당시 이스라엘 민족은 가난한 땅에서 그들의 정체성을 찾고 있었고, 요셉은 그들 가운데 특별한 역할을 맡게 될 인물로 선택되었습니다. 요셉의 꿈은 그가 단순한 소년이 아닌 하나님의 계획을 이루어가는 중요한 인물임을 나타내고 있습니다. 현대 사회에서도 우리는 각자의 삶 속에서 하나님께서 주신 비전과 꿈을 따르기 위해 애쓰지만, 그 과정에서 고난과 이해받지 못하는 순간들을 경험하기도 합니다. 요셉이 겪은 어려움은 우리에게도 위로가 됩니다. 하나님은 우리의 고난 속에서도 일하시는 분이시며, 그분의 계획은 우리의 이해를 초월합니다. 우리는 요셉의 이야기를 통해 믿음을 잃지 말고, 하나님께서 우리를 인도하신다는 확신을 가질 수 있습니다. 주님, 오늘 저희의 꿈과 비전을 주님께 맡깁니다. 우리의 삶 속에서 역사하시는 주님의 손길을 느끼게 하시고, 어떤 상황에서도 믿음을 잃지 않도록 도와주소서. 아멘.", "5-7": "창세기 37장 12절에서 36절은 요셉의 형들이 그를 미워하고 배신하는 이야기로, 가족 간의 갈등과 인간의 죄성을 여실히 드러냅니다. 이 사건은 고대 근동 사회에서의 형제 간의 질투와 야망을 반영하며, 요셉은 아버지 야곱의 사랑을 받는 특별한 존재로서 형들에게 더욱 미움의 대상이 되었습니다. 이러한 배경 속에서 우리는 현대 사회에서도 여전히 갈등과 질투가 존재함을 깨닫게 됩니다. 요셉이 겪은 배신과 고난은 우리가 인생에서 마주하는 어려움과 상실의 깊이를 상징합니다. 하지만 그럼에도 불구하고 하나님은 요셉의 고난을 통해 그의 삶을 새롭게 이끌어가시며, 결국에는 구원의 역사를 이루어 가십니다. 이는 우리에게 어떤 상황에서도 하나님의 선하신 계획이 이루어질 것임을 확신하게 합니다. 그러므로 오늘 우리가 겪는 고난도 하나님께서 우리를 위한 귀한 목적을 가지고 계심을 믿고 의지해야 합니다. 하나님, 저희의 연약함과 아픔을 아시고, 믿음으로 이겨낼 수 있도록 도와주옵소서. 삶의 모든 순간에 주님의 인도하심을 느끼며, 한 걸음씩 나아갈 수 있도록 이끌어 주시길 간구합니다.", "5-8": "창세기 38장에서는 유다와 다말의 이야기가 등장합니다. 이 이야기는 당시 가부장적 사회 속에서 여성이 얼마나 힘든 상황에 처해 있었는지를 잘 보여줍니다. 다말은 시아버지 유다를 통해 자신의 권리를 주장하고, 결국 하나님의 구속 계획에 중요한 역할을 하게 됩니다. 이 사건은 성경 전체에서 자주 접하는 주제인 회복과 구원, 그리고 하나님께서 우리의 불완전한 상황 속에서도 역사하신다는 것을 일깨워 줍니다. 현대 사회에서도 우리는 종종 주변의 압박과 고난 속에서 하나님을 잊고 살아가곤 합니다. 그러나 다말의 모습처럼 하나님께서 주신 권리를 주장하며, 어려운 상황 속에서도 믿음을 잃지 않는 것이 중요합니다. 이 이야기는 우리의 삶 속에서도 하나님이 일하고 계심을 믿게 하고, 힘든 시간을 겪고 있는 이들에게 따뜻한 위로가 됩니다. 하나님, 우리의 고난 속에서도 당신의 계획이 있음을 믿고 나아가게 하소서. 우리 삶의 모든 상황 속에서 당신의 사랑과 은혜를 경험하게 하시고, 우리가 다말처럼 믿음의 용기를 잃지 않게 도와주소서. 아멘.", "5-9": "창세기 39장 1절에서 6절은 요셉이 이집트에서 보디발의 집에 종으로 팔려 간 후의 이야기를 담고 있습니다. 요셉은 고난과 역경 속에서도 하나님이 함께하시고 그를 축복하신다는 사실을 보여줍니다. 이 시기는 이스라엘 민족이 애굽의 땅에서 종살이를 하게 될 배경을 형성하는 중요한 시점이며, 요셉의 삶은 하나님의 섭리를 드러내는 상징적인 사건입니다. 요셉은 자신의 처지에 억울함과 좌절이 있었지만, 그는 하나님을 의지하며 그곳에서도 충실한 삶을 살았습니다. 현대를 살아가는 우리도 때로는 어려운 상황에 처할 때가 많습니다. 그러나 그 속에서도 우리는 하나님의 인도하심을 믿고, 자신의 자리에서 최선을 다해야 합니다. 요셉처럼 하나님께서 우리와 함께하심을 믿고, 우리가 처한 환경 속에서도 긍정적인 영향을 끼치는 삶을 살기를 바랍니다. 우리는 서로의 고난을 함께 나누며, 하나님의 위로를 경험할 수 있습니다. 주님, 우리의 삶이 힘들고 어려워도 항상 함께하시는 주님을 믿게 하시고, 주님의 뜻을 이루는 도구가 되게 하옵소서.", "5-10": "창세기 39장 7절부터 23절은 요셉의 억울한 역경과 믿음의 시험을 다루고 있습니다. 이 본문은 요셉이 보디발의 아내의 유혹을 뿌리치고 오히려 하나님께 충성하는 모습을 통해 성도의 삶에서의 도덕적 결단과 신앙의 인내를 강조합니다. 요셉은 사면초가의 상황 속에서도 하나님의 정의를 믿고 그분의 말씀에 순종하며 자신의 정체성을 지켰습니다. 이는 우리 현대인에게도 중요한 교훈입니다. 삶의 어려움 속에서도 하나님에 대한 신뢰를 잃지 않고, 주어진 상황에서 최선을 다하는 태도가 필요합니다. 요셉이 감옥에 갇혔지만, 하나님은 그와 함께하셨습니다. 우리도 힘든 순간에 하나님이 우리와 함께하신다는 사실을 기억해야 합니다. 이 말씀을 통해 우리는 결단의 힘과 하나님의 인도를 바라보며 위로를 받을 수 있습니다. 주님, 저희가 주어진 상황 속에서도 믿음을 지키고, 주님을 의지하는 삶을 살 수 있도록 도와주시옵소서. 아멘.", "5-11": "창세기 40장 1절부터 23절은 요셉이 감옥에서 만난 술 맡은 관원장과 떡 굽는 관원장의 꿈을 해석하는 이야기입니다. 이 사건은 요셉이 억울한 감옥생활 속에서도 하나님께서 그와 함께하심을 믿고, 그의 재능을 통해 다른 이들에게 소망과 위로를 전하는 모습에서 깊은 교훈을 줍니다. 역사적으로, 요셉은 이집트에서 고난을 겪으며 하나님의 섭리를 경험하였고, 이러한 고난이 결국 그를 이스라엘 민족의 구원자로 세우는 과정의 일환이었습니다. 현대의 우리 또한 삶의 고난과 역경 속에서 하나님의 뜻을 찾고, 주어진 상황에서 최선을 다하며 다른 사람들에게 희망을 주는 존재가 되어야 합니다. 감옥에 있는 요셉은 자신의 처지에 좌절하지 않고, 또 다른 이들의 꿈을 해석함으로써 자신의 꿈을 이루는 길을 열어갔습니다. 이는 우리에게도 어떤 상황에서도 절망하기보다는 믿음과 사랑으로 주변을 바라보자는 따뜻한 위로의 메시지를 전합니다. 하나님께서 우리의 삶 속에서도 항상 함께하시며, 어려운 순간에도 희망의 꿈을 꾸게 하시길 기도합니다. 주님, 우리가 어떤 환경에 있든지 주님의 뜻을 신뢰하며 살아가게 하시고, 우리를 통해 주님의 사랑을 전하게 하소서. 아멘.", "5-12": "창세기 40장 1절부터 23절은 요셉이 감옥에서 만난 술 맡은 관원장과 떡 굽는 관원장의 꿈을 해석하는 이야기입니다. 이 사건은 요셉이 억울한 감옥생활 속에서도 하나님께서 그와 함께하심을 믿고, 그의 재능을 통해 다른 이들에게 소망과 위로를 전하는 모습에서 깊은 교훈을 줍니다. 역사적으로, 요셉은 이집트에서 고난을 겪으며 하나님의 섭리를 경험하였고, 이러한 고난이 결국 그를 이스라엘 민족의 구원자로 세우는 과정의 일환이었습니다. 현대의 우리 또한 삶의 고난과 역경 속에서 하나님의 뜻을 찾고, 주어진 상황에서 최선을 다하며 다른 사람들에게 희망을 주는 존재가 되어야 합니다. 감옥에 있는 요셉은 자신의 처지에 좌절하지 않고, 또 다른 이들의 꿈을 해석함으로써 자신의 꿈을 이루는 길을 열어갔습니다. 이는 우리에게도 어떤 상황에서도 절망하기보다는 믿음과 사랑으로 주변을 바라보자는 따뜻한 위로의 메시지를 전합니다. 하나님께서 우리의 삶 속에서도 항상 함께하시며, 어려운 순간에도 희망의 꿈을 꾸게 하시길 기도합니다. 주님, 우리가 어떤 환경에 있든지 주님의 뜻을 신뢰하며 살아가게 하시고, 우리를 통해 주님의 사랑을 전하게 하소서. 아멘.", "5-13": "창세기 41장 1절에서 16절은 요셉이 바로의 꿈을 해석하는 장면을 담고 있습니다. 이 본문은 고난과 시련 속에서도 하나님의 섭리가 어떻게 이루어지는지를 잘 보여줍니다. 당시 이스라엘 백성이 애굽에 있는 동안, 요셉은 감옥에서 오랜 세월을 보냈지만, 하나님은 그를 통해 애굽의 기근을 대비하게 하셨습니다. 현대를 살아가는 우리도 종종 이해할 수 없는 상황에 부딪힐 때가 많습니다. 그러나 요셉의 이야기는 하나님께서 우리의 고난을 통해 더 큰 계획을 이루신다는 것을 상기시켜 줍니다. 하나님은 우리의 어려움 속에서도 여전히 함께하시며, 그 분의 때를 기다리라는 메시지를 전합니다. 어떤 어려움이 있더라도, 하나님께서 주신 재능과 은혜를 통해 우리가 할 수 있는 최선을 다하는 것이 중요합니다. 오늘도 하나님께서 우리를 통해 일하시기를 기다리며 기도합시다. 주님, 우리의 삶 속에서 당신의 뜻을 알게 하시고, 고난 중에도 소망을 잃지 않게 하소서. Amen.", "5-14": "창세기 41:17-36에서는 요셉이 바로 앞에서 꿈을 해석하는 장면이 묘사됩니다. 이 당시 이집트는 기근을 겪고 있었고, 요셉은 하나님께서 주신 지혜로 이를 대비할 수 있는 방법을 제시했습니다. 요셉은 단순한 해석을 넘어, 그 꿈이 이집트와 주변 국가의 운명을 좌우할 것임을 깨닫고 적극적으로 대처할 방안을 제시합니다. 현대 사회에서도 우리는 불확실한 미래와 위기 속에서 하나님의 지혜를 구해야 합니다. 하나님은 우리에게 필요한 지혜와 통찰력을 주시며, 그에 따라 행동할 수 있는 용기를 부어주십니다. 지나친 두려움이나 불안함이 아닌, 하나님의 인도하심을 신뢰하는 것이 중요합니다. 삶의 어려움 속에서도 우리는 하나님의 계획이 있음을 기억하며, 그분의 뜻에 따라 준비하고 행동해야 합니다. 기도하며, 우리의 마음이 하나님의 뜻에 맞춰 변화되기를 소망합니다. 주님, 우리의 삶 속에서 지혜를 주시고, 어려운 순간에도 당신의 인도하심을 따르게 하소서.", "5-15": "창세기 41장 37절부터 57절까지의 말씀은 요셉이 이집트의 총리로서 백성들에게 곡식을 저장하고 기근을 대비하는 과정을 통해 하나님께서 어떻게 자신의 백성을 구원하시는지를 보여줍니다. 요셉은 인생의 고난과 역경을 견뎌내며, 하나님께서 주신 지혜로 이 위기를 기회로 바꾸는 모습을 통해 우리에게 믿음의 중요성을 일깨워 줍니다. 이 본문은 우리가 직면하는 어려움 속에서도 하나님의 섭리를 신뢰하고 주어진 환경을 통해 다른 이들을 돕는 사명을 기억하게 합니다. 현대 사회에서도 우리는 다양한 형태의 기근과 갈망을 경험합니다. 물질의 부족이나 정신적 고독 등으로 어려움을 겪는 이웃들을 향한 우리의 눈과 마음이 열려야 할 때입니다. 하나님께서는 우리를 통해 그들의 필요를 채우고, 사랑과 희망을 전하게 하십니다. 이 말씀을 묵상하며, 우리가 가진 것을 나누는 삶을 살기를 소망합니다. 주님, 우리의 마음을 열어 주셔서 어려운 이웃을 돌아보고, 그들의 아픔에 함께할 수 있는 지혜와 용기를 주소서. 또한, 우리가 직면한 기근과 같은 어려움 속에서도 주님의 계획을 신뢰하며 평안을 누리게 하소서. 아멘.", "5-16": "창세기 42장 1절에서 17절은 요셉의 형들이 기근으로 인해 이집트에 곡식을 사러 간 장면을 묘사하고 있습니다. 이스라엘의 가정이 겪고 있는 극심한 어려움은 당시의 시대적 배경을 잘 보여줍니다. 그들은 목숨을 유지하기 위해, 그리고 가족을 부양하기 위해 이방 땅으로 나아가야 했습니다. 요셉은 형들에게 드러나지 않은 채 그들의 상황을 지켜보며, 복잡한 감정 속에서 형들을 시험하게 됩니다. 이는 요셉이 겪은 고난과 배신의 여정을 통해 형들과의 관계 회복을 꾀하는 과정으로, 우리의 삶에서도 상처 받았던 관계를 회복하기 위해 필요한 시간이 있음을 상기시킵니다. 현대 사회에서도 우리는 서로의 상처를 이해하고, 용서하고 나아가는 과정을 겪습니다. 하나님은 우리의 아픔과 갈등 속에서도 함께하시며, 회복과 화해의 길로 인도하십니다. 그러므로 우리는 용서의 마음을 가지고, 어려운 관계에서도 진정한 사랑을 실천해 나가야 합니다. 주님, 우리의 마음속에 상처와 갈등을 치유해 주시고, 서로를 이해하고 포용할 수 있는 힘을 주옵소서. 아멘.", "5-17": "창세기 42장 18절부터 38절은 요셉이 형제들을 시험하면서 그들의 변화를 확인하고자 하는 장면을 보여줍니다. 당시 이스라엘 민족은 기근 속에서 생존을 위해 애쓰고 있었고, 요셉은 애굽의 총리로서 형제들을 맞이하면서 자신이 처한 고난과 그로 인해 형성된 인격을 돌아보게 됩니다. 현대의 우리도 삶에서 어려움을 겪으며, 이러한 시련이 어떤 변화를 가져다줄 수 있는지를 깊이 고민해보아야 합니다. 요셉은 형제들에게 진실을 요구하며, 그들의 마음속에 숨겨진 죄책감과 후회를 드러냈습니다. 이는 우리에게도 진정한 회개와 변화를 요구하는 하나님의 사랑을 상기시킵니다. 또한, 형들이 느끼는 두려움과 불안은 우리 일상에서도 느끼는 감정이며, 하나님께서는 그런 우리에게도 회복의 길을 제시하십니다. 오늘날, 우리는 서로의 아픔을 이해하고 위로하며, 함께 나아가는 공동체를 이루어야 합니다. 하나님, 저희가 고난을 통해 변화를 경험하고, 형제 자매와의 관계에서 진정한 회복을 이루어 갈 수 있도록 인도해 주시옵소서.", "5-18": "창세기 43장 1절에서 14절은 요셉과 그의 형제들 간의 복잡한 관계를 드러내는 중요한 구절입니다. 이 장면은 가뭄으로 인해 고통받는 가나안 땅의 가족이 생계를 위해 애굽으로 내려가는 과정에서 이루어집니다. 당시 이스라엘 백성이 겪고 있던 기근은 단순한 삶의 결핍이 아니라, 그들의 신앙과 관계의 회복을 위한 하나님의 섭리를 상징합니다. 현대 사회에서도 우리는 여러 가지 어려움과 위기를 겪으며, 그 속에서 하나님이 우리를 어떻게 인도하시는지를 다시금 돌아보아야 합니다. 특히, 형제 간의 갈등과 상처를 통해 하나님께서는 화해와 용서를 이루실 수 있음을 깨닫게 됩니다. 우리는 삶의 어려움 속에서도 서로의 존재를 소중히 여기며, 하나님의 뜻을 따르는 과정에서 위로받을 수 있습니다. 갈등과 아픔이 있는 관계에서 용서와 회복의 길을 찾아가는 것은 쉽지 않지만, 하나님께서는 우리 각자의 삶에 필요한 은혜를 주십니다. 주님, 우리가 겪는 모든 어려움과 갈등을 통해 더욱 깊은 신뢰와 사랑을 배우게 하시고, 주님의 인도하심을 따라 회복과 화해의 길로 나아가게 하소서. 아멘.", "5-19": "창세기 43장 1절에서 14절은 요셉과 그의 형제들 간의 복잡한 관계를 드러내는 중요한 구절입니다. 이 장면은 가뭄으로 인해 고통받는 가나안 땅의 가족이 생계를 위해 애굽으로 내려가는 과정에서 이루어집니다. 당시 이스라엘 백성이 겪고 있던 기근은 단순한 삶의 결핍이 아니라, 그들의 신앙과 관계의 회복을 위한 하나님의 섭리를 상징합니다. 현대 사회에서도 우리는 여러 가지 어려움과 위기를 겪으며, 그 속에서 하나님이 우리를 어떻게 인도하시는지를 다시금 돌아보아야 합니다. 특히, 형제 간의 갈등과 상처를 통해 하나님께서는 화해와 용서를 이루실 수 있음을 깨닫게 됩니다. 우리는 삶의 어려움 속에서도 서로의 존재를 소중히 여기며, 하나님의 뜻을 따르는 과정에서 위로받을 수 있습니다. 갈등과 아픔이 있는 관계에서 용서와 회복의 길을 찾아가는 것은 쉽지 않지만, 하나님께서는 우리 각자의 삶에 필요한 은혜를 주십니다. 주님, 우리가 겪는 모든 어려움과 갈등을 통해 더욱 깊은 신뢰와 사랑을 배우게 하시고, 주님의 인도하심을 따라 회복과 화해의 길로 나아가게 하소서. 아멘.", "5-20": "창세기 43장 15절에서 34절은 요셉이 형제들을 다시 맞이하는 장면을 통해 가족 간의 화해와 용서를 보여줍니다. 이 당시 이스라엘 백성은 기근으로 인해 생존의 위협을 받고 있었고, 요셉은 자신의 정체성을 숨긴 채 형제들을 시험하였습니다. 그가 형제들에게 베푸는 호의는 단순한 잔치가 아니라, 그들의 마음을 여는 중요한 과정이었습니다. 현대 사회에서도 우리는 가족, 친구, 동료와의 갈등 속에서 상처받고 아파하는 경우가 많습니다. 그러나 요셉의 행동은 우리가 서로를 이해하고 용서하는 것이 얼마나 중요한지를 일깨워줍니다. 하나님은 우리를 용서하시고 화해의 길로 인도하시는 분이십니다. 이 말씀을 통해 우리는 갈등 속에서도 사랑과 이해로 나아가는 힘을 얻을 수 있습니다. 주님, 오늘도 저희에게 형제와의 관계에서 용서와 화해의 마음을 주시고, 어려운 상황 속에서도 희망을 잃지 않도록 도와주소서. 아멘.", "5-21": "창세기 44장 1절에서 17절은 요셉이 형제들에게 은잔을 몰래 숨기고, 그 후 이들을 체포하는 이야기입니다. 이 사건은 단순한 복수의 차원을 넘어, 형제들이 자신들의 잘못을 깊이 성찰하게 하는 은혜의 과정으로 이해할 수 있습니다. 역사적으로 이 시기는 이스라엘 백성이 가나안 땅에서의 기근을 피해 애굽에 머물러 있었던 시기로, 요셉은 이러한 상황 속에서 하나님의 섭리를 이루어가고 있었습니다. 현대를 살아가는 우리도 때때로 고난과 시련을 겪으며, 과거의 잘못이나 아픔이 다시금 드러나는 경험을 할 수 있습니다. 그러나 이러한 순간들이 오히려 우리의 마음을 돌아보게 하고, 회개와 용서를 통해 진정한 회복의 길로 나아가게 한다는 것을 잊지 말아야 합니다. 요셉은 형제들을 정죄하기보다는 그들을 변화시키고자 하는 마음으로 대했고, 이는 우리에게도 깊은 사랑과 이해로 서로를 대하라는 교훈을 줍니다. 혹시 지금 힘든 시기를 지나고 있는 이가 있다면, 과거의 아픔이 현재의 성장으로 이어질 수 있도록 하나님께서 함께 하신다는 것을 기억하길 바랍니다. 하나님, 우리의 마음 속 깊은 상처와 아픔을 치유하시고, 다시 일어설 수 있는 용기를 주시옵소서. 형제자매의 관계를 회복하고, 서로를 사랑으로 감싸는 삶을 살 수 있도록 인도해 주시기를 간구합니다. 아멘.", "5-22": "창세기 44장 18절에서 34절까지의 말씀은 요셉과 그의 형들 간의 복잡한 감정과 관계를 드러내고 있습니다. 이 구절에서 유다의 간절한 호소는 형제애의 깊이를 보여줍니다. 역사적으로, 이 이야기는 이스라엘의 조상들이 겪었던 배신과 회복의 과정을 상징하며, 하나님께서 그들의 삶 속에서 역사하신다는 중요한 메시지를 담고 있습니다. 현대를 살아가는 우리도 종종 가족이나 가까운 사람과의 관계에서 갈등과 오해를 경험합니다. 그러나 이 말씀은 우리가 서로를 위해 헌신하고, 진정한 사랑으로 아픔을 나누어야 한다는 것을 깨닫게 합니다. 유다의 죽음과 생명의 대가를 지불하겠다는 헌신은 그리스도의 희생을 예표하는 듯합니다. 이처럼 우리는 서로의 짐을 나누고, 사랑으로 감싸안는 삶을 살아가야 합니다. 주님, 우리의 관계 속에서 사랑과 용서가 가득하게 하시고, 모든 갈등을 극복할 수 있는 지혜와 용기를 주시옵소서. Amen.", "5-23": "창세기 45장 1절에서 15절은 요셉이 자신의 정체성을 밝히고 형들에게 용서를 베푸는 감동적인 순간을 묘사합니다. 이 장면은 요셉이 애굽의 총리로서 권력을 쥐고 있지만, 형들의 고난과 자신의 과거를 결코 잊지 않고 있다는 사실을 보여줍니다. 역사적으로 이 사건은 형제간의 질투와 속박에서 회복으로 나아가는 구원의 서사를 담고 있습니다. 현대를 살아가는 우리에게도 가족 간의 갈등과 상처는 흔한 현실이며, 그 안에서 용서와 화해의 필요성을 깊이 깨닫게 됩니다. 요셉은 형들에게 \"내가 여기서 하나님이 나를 보내신 이유를 알게 되었다\"라고 말하며, 고난이 결국 하나님의 계획을 이루는 도구임을 강조합니다. 이는 우리에게도 아픔과 상처가 회복의 시작이 될 수 있음을 일깨워 줍니다. 그러므로 우리는 서로를 용서하며, 하나님이 주신 은혜를 나누는 삶을 살아가야 합니다. 사랑하는 하나님, 저희가 서로의 상처를 이해하고 품고 용서할 수 있는 마음을 주소서. 아멘.", "5-24": "창세기 45장 16절에서 28절은 요셉이 형들과 재회한 후, 그들이 아버지 야곱에게 그 소식을 전하는 장면을 묘사하고 있습니다. 요셉은 애굽의 총리로서 형들의 배신과 고통을 겪으면서도 하나님의 섭리를 신뢰하고, 형들에게 용서를 베풀었습니다. 이러한 역사는 우리에게 용서와 회복의 중요성을 상기시킵니다. 현대 사회에서도 가족 간의 갈등이나 상처는 빈번히 발생합니다. 우리는 요셉처럼 상대방을 이해하고 용서함으로써 관계를 회복할 수 있는 힘을 얻어야 합니다. 하나님은 우리에게 상처를 통해 성장할 기회를 주시며, 그 과정에서 진정한 화해와 사랑을 이루게 하십니다. 따라서 우리가 상처받은 과거를 돌아보며, 그것을 통해 하나님의 은혜를 경험할 수 있음을 믿습니다. 아버지 하나님, 우리 마음속의 모든 상처를 치유하시고, 용서의 마음을 허락하여 주시옵소서. 형제와 자매 간의 갈등을 해소하고, 서로를 사랑하는 마음으로 하나되게 하소서. 아멘.", "5-25": "창세기 46장 1절에서 27절은 야곱이 애굽으로 내려가는 장면을 묘사하고 있습니다. 이 사건은 그의 아들 요셉과의 재회를 위한 여정으로, 야곱이 하나님의 인도하심을 따라 새로운 땅으로 가는 믿음의 행보를 보여줍니다. 역사적으로 이스라엘 민족이 애굽에서 시작된 고난과 구원의 서사를 여는 중요한 순간이기도 합니다. 현대의 우리 삶에서도 때로는 하나님이 인도하시는 길이 불확실하고 두려울 수 있으나, 그 과정에서 믿음으로 나아간다면 하나님이 예비하신 은혜를 경험하게 됩니다. 야곱은 하나님과의 대화를 통해 두려움을 극복하고, 가족과 함께 새로운 시작을 맞이합니다. 이는 우리에게도 어려운 상황 속에서 하나님을 의지하고 함께 나아갈 때, 새로운 길을 열어주신다는 귀한 위로를 줍니다. 오늘도 우리는 야곱처럼 하나님께 우리의 염려를 맡기고, 그 안에서 주시는 평강을 누리며 나아가야 합니다. 하나님, 저희가 불확실한 상황 속에서도 당신의 인도하심을 신뢰할 수 있도록 도와주시고, 믿음으로 함께 걸어가는 삶을 살게 해 주옵소서. 아멘.", "5-26": "창세기 46장 1절에서 27절은 야곱이 애굽으로 내려가는 장면을 묘사하고 있습니다. 이 사건은 그의 아들 요셉과의 재회를 위한 여정으로, 야곱이 하나님의 인도하심을 따라 새로운 땅으로 가는 믿음의 행보를 보여줍니다. 역사적으로 이스라엘 민족이 애굽에서 시작된 고난과 구원의 서사를 여는 중요한 순간이기도 합니다. 현대의 우리 삶에서도 때로는 하나님이 인도하시는 길이 불확실하고 두려울 수 있으나, 그 과정에서 믿음으로 나아간다면 하나님이 예비하신 은혜를 경험하게 됩니다. 야곱은 하나님과의 대화를 통해 두려움을 극복하고, 가족과 함께 새로운 시작을 맞이합니다. 이는 우리에게도 어려운 상황 속에서 하나님을 의지하고 함께 나아갈 때, 새로운 길을 열어주신다는 귀한 위로를 줍니다. 오늘도 우리는 야곱처럼 하나님께 우리의 염려를 맡기고, 그 안에서 주시는 평강을 누리며 나아가야 합니다. 하나님, 저희가 불확실한 상황 속에서도 당신의 인도하심을 신뢰할 수 있도록 도와주시고, 믿음으로 함께 걸어가는 삶을 살게 해 주옵소서. 아멘.", "5-27": "창세기 47장 1절에서 12절까지의 말씀은 요셉이 자신의 가족을 이집트로 데려가 바로 앞에 나아가는 장면을 담고 있습니다. 이 시기는 이스라엘 민족의 기원을 형성하는 중요한 역사적 배경을 가지고 있습니다. 기근으로 인해 고통받는 가족을 구하기 위해 요셉은 자신의 위치를 활용하여 아버지 야곱과 형제들을 안전하게 이끌어갑니다. 이는 우리에게 사랑과 책임이 어떻게 삶을 변화시킬 수 있는지를 보여줍니다. 현대를 살아가는 우리도 때때로 어려운 상황 속에서 다른 이들에게 희망의 빛이 되어야 할 때가 있습니다. 요셉처럼 누군가의 삶을 지탱해주는 존재가 되는 것은 하나님께서 우리에게 부여하신 사명입니다. 또한, 야곱이 애굽 땅에서 가족을 이룬 것처럼, 하나님은 우리를 다양한 방식으로 연결하고 그 가운데서 역사하십니다. 우리의 삶 속에서도 하나님은 언제나 함께 하시며, 힘들고 고통스러운 순간에도 그분의 위로가 필요하다는 것을 잊지 말아야 합니다. 오늘도 주님의 손길을 느끼며, 우리가 서로에게 위로와 사랑을 전하는 삶을 살아가기를 기도합니다. 주님, 우리의 삶이 서로에게 힘이 되게 하시고, 주님의 뜻을 이루는 도구가 되게 인도해 주옵소서.", "5-28": "창세기 47장 13-31절은 요셉의 지혜로운 관리 아래 이집트가 기근을 극복하고 생명을 유지하는 과정을 보여줍니다. 당시 이집트는 주변 국가들보다 경제적 안정성을 갖추고 있었고, 이는 하나님께서 요셉을 통해 이루신 구원의 역사였습니다. 요셉은 자신과 가족의 생존을 위해 이집트의 자원을 활용하며, 기근으로 고통받는 많은 사람들을 돕는 역할을 했습니다. 현대 사회에서도 우리는 여러 가지 시련과 기근을 겪고 있습니다. 물질적 결핍이나 정서적 고통 속에서 서로를 돕고 지지하는 것이 중요합니다. 이 말씀은 우리에게 하나님의 인도하심을 믿고, 어려움 속에서도 희망의 빛을 찾으라는 위로를 줍니다. 우리는 작은 나눔이 큰 영향력을 미칠 수 있음을 잊지 말아야 합니다. 주님, 저희가 요셉처럼 주어진 상황 속에서 최선을 다하며, 서로를 위해 나눌 수 있는 마음을 허락해 주세요. 저희가 겪는 고난 속에서도 주님의 뜻을 찾고, 서로를 격려하는 공동체가 되게 하소서. 아멘.", "5-29": "창세기 48장 1-22절은 야곱이 임종을 앞두고 손자 에브라임과 므낫세를 축복하는 장면을 통해 하나님의 구속 계획이 어떻게 세대에서 세대로 이어지는지를 보여줍니다. 이 이야기는 이스라엘의 조상들이 하나님과의 언약을 어떻게 소중히 여겼는지를 드러내며, 특히 에브라임이 므낫세보다 앞서 축복받는 모습은 하나님의 뜻이 인간의 기대를 넘어선다는 것을 상기시킵니다. 현대를 살아가는 우리도 과거와 현재, 미래의 연결성을 느끼며 우리의 삶 속에서 하나님의 뜻을 찾고자 합니다. 하나님은 여전히 우리 각자의 삶 속에서 역사하시며, 우리가 예상치 못한 방법으로 일하십니다. 이 말씀은 어려움 속에서도 하나님께서 우리를 향한 계획이 있음을 일깨우며, 그의 주권 아래에서 평안을 찾게 해줍니다. 힘든 순간에도 하나님은 우리를 잊지 않으시며, 우리는 그분의 은혜를 통해 새로운 소망을 발견할 수 있습니다. 사랑하는 주님, 우리의 삶에 기름 부으시고, 우리의 마음을 열어 주시어 당신의 뜻을 깨닫게 하소서. 아멘.", "5-30": "창세기 49장 1절에서 28절은 야곱이 그의 아들들에게 각각 축복의 말씀을 전하는 장면으로, 이스라엘 역사에서 중요한 의미를 지닙니다. 이 말씀은 단순한 가족의 축복이 아니라 각 지파의 미래와 역할을 예고하는 예언적인 차원에서도 해석됩니다. 야곱은 그의 아들들에게 각자의 성격과 삶의 여정을 반영하여 축복을 주었으며, 이는 그들이 앞으로 나아갈 방향을 제시하는 귀한 가르침입니다. 오늘날 우리는 이 말씀을 통해 우리 각자의 정체성과 사명을 깊이 고민해볼 수 있습니다. 세상이 혼란스럽고 불확실할 때, 우리는 하나님께서 우리에게 주신 고유한 사명과 축복을 기억하고 그에 따라 살아가야 합니다. 또한 야곱의 축복은 우리의 삶 속에서도 여전히 유효하며, 하나님께서 우리 각자에게 부여하신 은혜와 가능성을 상기시킵니다. 힘든 순간에도 하나님은 우리의 곁에 계시며, 그분의 사랑과 은혜는 결코 변하지 않습니다. 주님, 저희가 각자의 자리에서 부르심에 응답하며 살아갈 수 있도록 도와주시고, 주님의 축복이 우리의 삶 속에 가득하기를 기도합니다. 아멘.", "5-31": "창세기 50장 1절에서 26절은 요셉이 아버지 야곱의 장례를 치르는 장면을 통해 가족과 사랑, 그리고 상실의 아픔을 깊이 있게 묵상하게 합니다. 야곱이 세상을 떠날 때, 요셉은 그를 위해 눈물을 흘리며 슬퍼하고 장례를 치르는 과정은 고통 속에서도 사랑이 얼마나 깊은지를 보여줍니다. 요셉은 형들에게 자신이 그들을 용서하였음을 다시 한번 확인시키며, 하나님의 계획과 섭리가 있음을 강조합니다. 이는 우리가 현대 사회에서 겪는 갈등과 상처를 치유하는 데 필요한 중요한 교훈으로, 진정한 용서와 화해가 얼마나 중요한지를 일깨워줍니다. 우리도 종종 상실과 아픔을 경험하지만, 요셉처럼 하나님이 주시는 평안을 통해 서로를 용서하고 사랑할 수 있습니다. 이 말씀을 통해 우리가 서로의 아픔을 이해하고 함께 울고 웃는 공동체로 성장할 수 있기를 기도합니다. 하나님, 우리의 상처를 치유하시고, 서로를 위한 용서를 주시옵소서. 아멘.", "6-1": "고린도전서 1장 1절에서 9절은 바울이 고린도 교회에 보내는 편지의 서두로, 하나님께서 그들을 향한 부르심과 은혜를 강조하고 있습니다. 고린도 지역은 다양한 문화와 종교가 얽혀 있었고, 이러한 배경 속에서 교회가 직면한 도전과 갈등이 많았습니다. 하지만 바울은 그들을 '하나님의 교회'라고 부르며, 그리스도 안에서의 정체성을 확립하도록 격려합니다. 이는 오늘날 우리에게도 중요합니다. 우리는 각자의 삶에서 여러 유혹과 갈등을 경험하지만, 하나님께서 이미 우리를 부르시고 선택하셨음을 기억해야 합니다. 이 말씀은 우리에게 하나님의 은혜와 성령의 위로를 통해 우리의 삶이 변화될 수 있음을 일깨워 줍니다. 현대 사회에서 상처받고 지친 영혼들에게, 우리는 하나님께서 주신 소망과 힘으로 다시 일어설 수 있음을 전해야 합니다. 그러므로, 오늘 이 말씀을 통해 하나님과의 깊은 교제를 누리며, 그분의 부르심에 응답할 수 있기를 기도합니다. 하나님, 저희를 부르시고 은혜를 베푸신 것에 감사드립니다. 저희가 그리스도 안에서 더 깊은 관계를 맺고, 세상 속에서 당신의 사랑을 전하는 삶을 살아가게 하소서.", "6-2": "고린도전서 1장 1절에서 9절은 바울이 고린도 교회에 보내는 편지의 서두로, 하나님께서 그들을 향한 부르심과 은혜를 강조하고 있습니다. 고린도 지역은 다양한 문화와 종교가 얽혀 있었고, 이러한 배경 속에서 교회가 직면한 도전과 갈등이 많았습니다. 하지만 바울은 그들을 '하나님의 교회'라고 부르며, 그리스도 안에서의 정체성을 확립하도록 격려합니다. 이는 오늘날 우리에게도 중요합니다. 우리는 각자의 삶에서 여러 유혹과 갈등을 경험하지만, 하나님께서 이미 우리를 부르시고 선택하셨음을 기억해야 합니다. 이 말씀은 우리에게 하나님의 은혜와 성령의 위로를 통해 우리의 삶이 변화될 수 있음을 일깨워 줍니다. 현대 사회에서 상처받고 지친 영혼들에게, 우리는 하나님께서 주신 소망과 힘으로 다시 일어설 수 있음을 전해야 합니다. 그러므로, 오늘 이 말씀을 통해 하나님과의 깊은 교제를 누리며, 그분의 부르심에 응답할 수 있기를 기도합니다. 하나님, 저희를 부르시고 은혜를 베푸신 것에 감사드립니다. 저희가 그리스도 안에서 더 깊은 관계를 맺고, 세상 속에서 당신의 사랑을 전하는 삶을 살아가게 하소서.", "6-3": "고린도전서 1장 10절에서 17절은 바울이 고린도 교회에 보내는 편지의 중요한 부분으로, 분열과 갈등으로 고통받는 교회 공동체에 대한 강한 경고와 초대의 메시지를 담고 있습니다. 고린도 지역은 다양한 문화와 배경을 가진 사람들이 모여 있는 도시로, 이러한 다양성이 때로는 교회의 분열을 초래했습니다. 바울은 그들에게 “한 몸, 한 마음, 한 목소리로” 화합할 것을 촉구하며, 그리스도의 십자가가 중심이 되어야 함을 강조합니다. 현대 사회에서도 우리는 종종 차이를 이유로 서로를 갈라놓는 경향이 있습니다. 하지만 그리스도의 사랑 안에서 우리는 다름을 넘어 하나가 되어야 합니다. 이는 단순한 외적인 통합이 아니라, 내적인 연합과 사랑을 바탕으로 한 것이어야 합니다. 우리 각자는 그리스도의 몸의 일원으로서, 서로를 존중하고 사랑하며 하나됨을 추구해야 할 책임이 있습니다. 이 말씀을 통해 우리는 갈등 속에서도 평화를 이루고, 서로를 격려하며 나아가야 할 필요성을 깨닫습니다. 주님, 우리를 하나되게 하여 주시고, 사랑으로 서로를 이해하며 품을 수 있는 마음을 허락하여 주옵소서. 아멘.", "6-4": "고린도전서 1장 18-31절은 그리스도의 십자가가 세상의 지혜와 대조되는 메시지를 전합니다. 고린도는 당시 철학과 지혜가 넘치는 도시였지만, 바울은 그들에게 십자가의 도가 구원에 이르는 하나님의 능력임을 강조합니다. 이 말씀은 오늘날에도 여전히 중요한 의미를 가지고 있습니다. 우리는 종종 세상의 성공 기준과 지혜에 휘둘리기 쉬운데, 하나님은 오히려 약한 자와 천한 자를 통해 자신의 목적을 이루신다는 사실을 잊지 말아야 합니다. 이 말씀은 우리에게 하나님께서 우리의 연약함 속에서도 역사하시고, 그분의 능력이 드러날 수 있음을 일깨워 줍니다. 힘들고 지친 마음으로 이 세상을 살아가는 우리에게, 하나님은 십자가의 사랑을 통해 깊은 위로와 소망을 주십니다. 우리는 그리스도를 통해 우리의 정체성과 가치를 발견할 수 있으며, 그분의 지혜가 우리의 삶을 이끌어 주실 것입니다. 이 말씀을 묵상하며 우리가 주님 안에서 진정한 자아를 찾고, 그분의 사랑 안에서 살아가기를 기도합니다. 주님, 우리를 당신의 지혜로 채워 주시고, 우리의 약함을 통해 당신의 영광이 드러나게 하소서.", "6-5": "고린도전서 2장 1절에서 5절은 사도 바울이 자신의 전도 방식에 대해 깊은 통찰을 제공합니다. 당시 고린도는 그리스 철학과 수사학이 지배하던 도시로, 많은 이들이 화려한 언변과 지식에 매료되었지만 바울은 그러한 방식이 아닌 오직 예수 그리스도의 복음에 초점을 맞추었습니다. 그는 자신의 약함과 두려움을 솔직히 드러내며, 하나님의 능력이 그의 약함 속에서 온전히 드러나기를 원했습니다. 오늘날 우리는 세상에서의 성공과 화려함에 휘둘리기 쉽지만, 바울의 본보기를 통해 진정한 힘은 우리의 연약함 속에서 하나님의 은혜가 드러날 때에 있음을 깨달아야 합니다. 하나님은 우리의 부족함을 채우시고, 그를 통해 일하시는 분이십니다. 우리는 우리의 믿음과 삶의 여정에서 바울처럼 예수 그리스도 외에는 아무것도 알지 않겠다는 결단이 필요합니다. 어려운 상황 속에서도 하나님께서 함께하신다는 확신은 우리에게 위로가 됩니다. 기도 드리오니, 주님 아버지, 우리의 연약함을 아시고 그 속에서 역사하시는 주님의 능력을 경험하게 하소서. 우리가 어떤 상황에서도 예수 그리스도의 복음을 전하며 살아갈 수 있도록 붙들어 주시옵소서. 아멘.", "6-6": "고린도전서 2장 6절부터 16절은 바울이 하나님의 지혜에 대해 깊이 있는 통찰을 제공합니다. 이 본문이 쓰여진 시대, 고린도는 다양한 문화와 철학이 교차하는 도시로, 성도들은 세속적 지혜와 하나님의 지혜 사이에서 갈등을 겪고 있었습니다. 바울은 이들에게 하나님의 지혜가 세상의 지혜와 다르며, 성령을 통해만 이 진리를 알 수 있음을 강조합니다. 현대 사회에서도 우리는 종종 세속적인 기준과 가치에 따라 삶의 방향을 정하려는 유혹에 놓입니다. 그러나 하나님께서 우리에게 주시는 진정한 지혜는 세상의 것과는 차원이 다릅니다. 이 말씀은 우리가 성령의 인도를 받아 진리를 깨닫고, 하나님의 깊은 뜻을 이해할 수 있도록 초대합니다. 삶의 어려움 속에서 하나님의 지혜를 구하며, 성령께서 우리를 이끌어 주시기를 바랍니다. 우리가 세상의 기준이 아닌 하나님의 진리로 우리의 삶을 세워 나가도록 도와주시기를 기도합니다. 주님, 우리의 마음을 열어주시고, 진리의 영으로 충만하게 하여 주옵소서. 우리가 당신의 뜻을 온전히 이해하고 따를 수 있도록 이끌어 주시길 간구합니다.", "6-7": "고린도전서 3장 1절에서 9절까지의 말씀은 초대 교회 내의 분열과 교만을 다루고 있습니다. 바울은 고린도 교인들이 영적인 성숙에 이르지 못하고, 세상의 지혜와 인간적인 기준으로 서로를 평가하며 나누고 있음을 안타까워합니다. 이 말씀은 오늘날 우리에게도 여전히 중요한 교훈을 줍니다. 교회 안에서 서로 다른 의견이나 배경 때문에 갈등이 생길 때, 우리는 성숙한 믿음으로 서로를 바라보아야 합니다. 하나님은 우리 각자를 부르시고, 서로 다른 역할을 주셨으며, 모든 것이 그분의 뜻 안에서 이루어짐을 잊지 말아야 합니다. 이 말씀은 무너진 관계를 회복하고, 사랑으로 연합하는 데 필요한 위로와 격려를 줍니다. 우리는 하나님 앞에서 한 몸으로 연결되어 있음을 깨닫고, 각자의 위치에서 최선을 다하며 서로를 격려해야 합니다. 기도합니다. 주님, 우리를 하나로 묶어 주시고, 서로를 사랑과 이해로 대하게 하소서. 분열의 아픔 속에서도 주님의 뜻을 이루어가게 하여 주시옵소서. Amen.", "6-8": "고린도전서 3장 10절에서 23절은 바울이 교회에 대해 품고 있는 깊은 염려와 사랑을 보여줍니다. 고린도 교회는 여러 분파와 분쟁으로 혼란스러운 상황에 있었고, 바울은 이를 해결하기 위해 신앙의 기초인 예수 그리스도를 다시 강조합니다. \"각 사람은 자기의 기초 위에 건축할지니\"라는 말씀은 우리의 신앙 생활이 어떤 기초 위에 세워져야 하는지를 일깨워 줍니다. 오늘날에도 우리는 종종 세상의 여러 가치관과 유혹에 흔들리며, 참된 기초인 그리스도를 잊고 살아갈 때가 많습니다. 이 말씀은 우리에게 정직하게 자신의 신앙을 돌아보고, 믿음을 다시 세울 기회를 제공합니다. 주님은 우리가 세운 건축물, 즉 우리의 삶이 어떠한지를 보시며, 우리에게 기초를 재점검하라는 초청을 하십니다. 우리의 삶이 그리스도 중심으로 세워질 때, 진정한 평안과 기쁨을 누릴 수 있습니다. 사랑하는 형제자매들에게, 당신의 수고와 헌신이 헛되지 않음을 기억하고, 그리스도의 사랑 속에서 새 힘을 얻으시길 바랍니다. 기도하겠습니다. 주님, 우리의 삶이 주님께서 기초를 세우신 그리스도 위에 굳건히 서게 하시고, 항상 주님의 뜻을 따라 살아갈 수 있도록 인도해 주시옵소서. 아멘.", "6-9": "고린도전서 3장 10절에서 23절은 바울이 교회에 대해 품고 있는 깊은 염려와 사랑을 보여줍니다. 고린도 교회는 여러 분파와 분쟁으로 혼란스러운 상황에 있었고, 바울은 이를 해결하기 위해 신앙의 기초인 예수 그리스도를 다시 강조합니다. \"각 사람은 자기의 기초 위에 건축할지니\"라는 말씀은 우리의 신앙 생활이 어떤 기초 위에 세워져야 하는지를 일깨워 줍니다. 오늘날에도 우리는 종종 세상의 여러 가치관과 유혹에 흔들리며, 참된 기초인 그리스도를 잊고 살아갈 때가 많습니다. 이 말씀은 우리에게 정직하게 자신의 신앙을 돌아보고, 믿음을 다시 세울 기회를 제공합니다. 주님은 우리가 세운 건축물, 즉 우리의 삶이 어떠한지를 보시며, 우리에게 기초를 재점검하라는 초청을 하십니다. 우리의 삶이 그리스도 중심으로 세워질 때, 진정한 평안과 기쁨을 누릴 수 있습니다. 사랑하는 형제자매들에게, 당신의 수고와 헌신이 헛되지 않음을 기억하고, 그리스도의 사랑 속에서 새 힘을 얻으시길 바랍니다. 기도하겠습니다. 주님, 우리의 삶이 주님께서 기초를 세우신 그리스도 위에 굳건히 서게 하시고, 항상 주님의 뜻을 따라 살아갈 수 있도록 인도해 주시옵소서. 아멘.", "6-10": "고린도전서 4장 1절부터 5절까지의 말씀은 사도 바울이 자신의 사도직과 신앙의 본질을 강조하는 내용입니다. 바울은 자신이 그리스도의 일꾼이자 하나님의 비밀을 맡은 관리자로서의 책임을 설명합니다. 당시 고린도 교회는 분열과 교만으로 혼란스러웠고, 바울은 그들에게 참된 리더십의 모델을 제시하고자 했습니다. 오늘날 우리는 많은 정보와 의견 속에서 진리를 찾기 어려운 시대에 살고 있습니다. 이 말씀은 우리가 어떤 직분에 있든 간에 하나님 앞에서의 충실함이 가장 중요하다는 것을 일깨워 줍니다. 우리는 사람의 판단보다 하나님의 판단을 두려워하며 살아야 하며, 결국 우리의 행위는 그분 앞에서 드러날 것입니다. 이 말씀을 통해 위로받는 것은 하나님께서 우리의 마음과 동기를 아시고, 모든 것을 드러내실 때에도 그분의 사랑과 은혜로 우리를 감싸주실 것이라는 믿음입니다. 기도합니다. 주님, 제가 맡은 직분을 통해 당신의 뜻을 온전히 실천할 수 있도록 인도해 주시고, 사람의 시선이 아닌 당신의 판단을 의지하게 하소서. 주님의 은혜로 저의 마음을 새롭게 하시고, 언제나 충실한 일꾼이 되게 하옵소서. 아멘.", "6-11": "고린도전서 4장 6절부터 13절까지의 말씀은 사도 바울이 자신과 다른 사도들의 사역을 통해 겸손과 진정한 그리스도인의 삶을 어떻게 살아가야 하는지를 가르치고 있습니다. 고린도 교회는 당시 분열과 교만이 만연한 상태였으며, 바울은 그들에게 자신의 사역을 통해 하나님께서 주신 은혜의 깊이를 깨닫게 하고자 했습니다. 그는 자신의 고난을 통해 그리스도의 고난에 참여하는 삶을 살고 있음을 강조하며, 세상의 평가와는 상관없이 하나님의 뜻을 따르는 것이 진정한 삶의 목적임을 일깨워 줍니다. 현대를 살아가는 우리 역시 여러 가지 시험과 고난 속에서 하나님을 의지하며 겸손한 마음으로 살아가야 합니다. 세상의 가치관과 기준이 아닌, 하나님께서 주신 소명을 붙잡고 살아갈 때 진정한 평안을 누릴 수 있습니다. 우리의 약함 속에서 하나님의 능력이 드러나고, 그로 인해 우리는 서로를 위로하고 격려하는 공동체가 될 수 있습니다. 이러한 말씀을 마음에 새기며 오늘 하루를 살아갈 때, 하나님의 은혜가 우리의 삶을 가득 채우기를 기도합니다. 하나님, 우리에게 겸손과 사랑으로 서로를 대할 수 있는 마음을 주시고, 어떤 고난 속에서도 주님의 뜻을 찾으며 살아가게 하소서.", "6-12": "고린도전서 4장 14절에서 21절은 바울이 고린도 교회에 보낸 편지로, 그들이 겪고 있는 다양한 문제와 갈등을 다루고 있습니다. 바울은 자신을 사랑하는 아버지와 같이 그들에게 권면하고, 그들의 영적 성장을 위해 진심으로 걱정하고 있습니다. 당시 고린도 교회는 교만과 분열로 인해 혼란스러웠고, 바울은 그들에게 겸손과 진정한 리더십의 모델을 제시합니다. 이 말씀은 현대의 우리에게도 깊은 교훈을 줍니다. 세상의 성공과 지혜에 휘둘리지 않고, 하나님께서 주신 진정한 가치와 사랑으로 서로를 다독이고 격려하는 것이 중요합니다. 우리는 교회 공동체 안에서 진정한 형제자매로서 서로를 위해 기도하고, 힘들 때 위로를 주는 존재가 되어야 합니다. 바울의 권면처럼, 우리의 삶에서도 아버지의 사랑으로 가득 채워져야 하며, 그 사랑이 다른 이들에게도 흘러갈 수 있도록 해야 합니다. 주님, 우리를 통해 서로에게 힘과 위로가 되는 공동체가 되게 하소서. 우리에게 주신 사랑으로 세상을 변화시킬 수 있도록 인도해 주시옵소서. 아멘.", "6-13": "고린도전서 5장 1절부터 8절까지의 말씀은 고린도 교회 내에서 발생한 심각한 죄에 대해 바울이 경고하는 내용을 담고 있습니다. 당시 고린도는 다양한 문화와 가치가 뒤섞인 도시로, 그리스도인들이 세속적인 영향을 받기 쉬운 환경이었습니다. 바울은 성도들이 이러한 죄를 묵인하는 것이 공동체 전체에 악영향을 미친다고 경고하며, 교회가 거룩함을 지키도록 촉구합니다. 오늘날 우리 역시 세속적인 가치관과 죄가 교회에 침투할 위험이 있으며, 이를 경계해야 합니다. 우리는 상호 의존적인 공동체로서 서로의 영혼을 돌보아야 하고, 죄를 드러내고 회개함으로써 하나님께로 돌아가는 길을 찾아야 합니다. 이 말씀은 단순히 처벌에 대한 경고가 아니라, 회복의 초대이기도 합니다. 하나님은 우리가 진정으로 회개할 때, 우리를 회복시키고, 다시금 그의 거룩한 뜻 안으로 인도하십니다. 사랑하는 주님, 우리의 마음과 공동체를 깨끗하게 하여 주시고, 서로를 사랑하며 진리 안에서 성장할 수 있도록 도와주소서. 아멘.", "6-14": "고린도전서 5장 9-13절은 바울이 교회의 성도들에게 부도덕한 삶을 사는 사람들과의 교제를 경고하는 중요한 메시지를 전달합니다. 고린도 교회는 당시 세속적 가치관이 만연한 도시에서 형성되었고, 그로 인해 교회 내에서도 도덕적 타락이 발생했습니다. 바울은 성도들에게 겉으로 보기에 교제하는 것이 아니라, 진정한 예수 그리스도의 제자로서의 삶을 살도록 권면합니다. 이는 단순히 외적인 행동의 문제가 아니라, 신앙 공동체의 정체성과 순결성을 지키기 위한 것입니다. 현대의 교회 안에서도 우리는 세상의 가치와 유혹에 쉽게 흔들릴 수 있습니다. 그러므로 바울의 말씀이 주는 교훈은 우리 각자가 그리스도의 사랑과 진리를 따라 살아가도록 하는 것입니다. 우리는 서로를 사랑하고 세상의 악에 물들지 않도록 경계해야 하며, 그 과정에서 서로를 위로하고 격려해야 합니다. 하나님, 우리에게 주어진 교회의 공동체를 통해 서로를 세우고, 진리 안에서 살아가게 하소서. 우리가 항상 그리스도의 빛을 비추는 삶을 살도록 인도해 주시옵소서. 아멘.", "6-15": "고린도전서 6장 1절에서 11절은 바울이 교회 내에서의 갈등 해결과 성도의 정체성을 강조하는 중요한 말씀입니다. 고린도 교회는 당시 문화적, 도덕적 혼란 속에 있었고, 믿는 자들 사이에서도 법정으로 가는 일이 흔했습니다. 바울은 성도들이 이웃과의 갈등을 해결하는 과정에서 세속의 법정을 이용하는 대신, 교회 내에서 문제를 해결하라고 권면합니다. 이는 성도들이 하나님의 자녀로서의 정체성을 잊지 말라는 메시지입니다. 현대 사회에서도 우리는 갈등과 분쟁 속에서 살아가고 있으며, 이 말씀은 우리가 어떻게 서로를 대하고 사랑해야 하는지를 상기시킵니다. 하나님의 은혜로 우리는 서로 용서하고 화해할 수 있는 힘을 지니고 있습니다. 이 말씀은 또한 우리의 과거와 죄를 넘어 하나님께서 주시는 새로운 정체성을 일깨워줍니다. 우리가 예수 그리스도 안에서 새롭게 된 존재임을 기억하며, 서로를 존중하고 사랑하는 관계를 이어가야 합니다. 주님, 이 말씀을 통해 우리 마음에 화해의 마음과 사랑을 부어주시고, 서로를 이해하고 용서하는 성숙한 믿음의 공동체가 되게 하소서. 아멘.", "6-16": "고린도전서 6장 1절에서 11절은 바울이 교회 내에서의 갈등 해결과 성도의 정체성을 강조하는 중요한 말씀입니다. 고린도 교회는 당시 문화적, 도덕적 혼란 속에 있었고, 믿는 자들 사이에서도 법정으로 가는 일이 흔했습니다. 바울은 성도들이 이웃과의 갈등을 해결하는 과정에서 세속의 법정을 이용하는 대신, 교회 내에서 문제를 해결하라고 권면합니다. 이는 성도들이 하나님의 자녀로서의 정체성을 잊지 말라는 메시지입니다. 현대 사회에서도 우리는 갈등과 분쟁 속에서 살아가고 있으며, 이 말씀은 우리가 어떻게 서로를 대하고 사랑해야 하는지를 상기시킵니다. 하나님의 은혜로 우리는 서로 용서하고 화해할 수 있는 힘을 지니고 있습니다. 이 말씀은 또한 우리의 과거와 죄를 넘어 하나님께서 주시는 새로운 정체성을 일깨워줍니다. 우리가 예수 그리스도 안에서 새롭게 된 존재임을 기억하며, 서로를 존중하고 사랑하는 관계를 이어가야 합니다. 주님, 이 말씀을 통해 우리 마음에 화해의 마음과 사랑을 부어주시고, 서로를 이해하고 용서하는 성숙한 믿음의 공동체가 되게 하소서. 아멘.", "6-17": "고린도전서 6:12-20의 말씀은 우리 몸이 단순한 육체가 아니라 하나님이 거하시는 성전이라는 깊은 진리를 드러냅니다. 고린도 지역은 다양한 우상 숭배와 성적인 타락이 만연했던 곳으로, 바울은 이러한 문화 속에서 그리스도인들이 어떻게 살아가야 하는지를 경고하고 있습니다. \"모든 것이 내게 합법이나 모든 것이 나에게 유익한 것은 아니다\"라는 말씀은 우리가 자유를 누리면서도 그 자유가 우리를 파괴하지 않도록 경계해야 함을 강조합니다. 현대 사회에서도 우리는 다양한 유혹에 직면해 있으며, 이러한 유혹이 우리의 정체성과 신앙에 부정적인 영향을 미칠 수 있음을 기억해야 합니다. 하나님께서 우리를 구속하셨으므로, 우리는 우리의 몸을 통해 그분의 영광을 드러내야 할 책임이 있습니다. 이 말씀은 또한 우리의 연약함과 죄로부터 회복의 길을 제공하는 따뜻한 위로이기도 합니다. 우리는 언제든지 하나님께 돌아가 그분의 사랑과 용서를 경험할 수 있으며, 그분의 능력이 우리의 연약함을 강하게 만드는 것을 믿어야 합니다. 사랑의 하나님, 오늘 하루도 저희가 저희의 몸과 마음을 통해 당신의 영광을 드러내게 하시고, 유혹에 굴복하지 않도록 지켜주시옵소서. 예수님의 이름으로 기도합니다. 아멘.", "6-18": "고린도전서 7장 1절부터 9절까지의 말씀은 바울이 고린도 교회 성도들에게 결혼과 독신에 대한 주제를 다루고 있는 중요한 구절입니다. 당시 고린도 사회는 윤리가 혼란스러운 상태였고, 성적인 방종이 만연해 있었던 만큼 바울은 결혼의 의미와 독신의 탁월함을 강조합니다. 그는 독신을 선택한 사람에게 하나님께서 주신 특별한 은혜가 있음을 언급하며, 결혼 생활이 가져오는 책임과 기쁨을 동시에 인정합니다. 이는 현대 사회에서도 여전히 유효한 메시지로, 개인의 선택과 하나님의 부르심을 존중해야 함을 보여줍니다. 결혼이 주는 사랑과 헌신의 아름다움, 그리고 독신으로서 하나님과의 깊은 교제를 통해 누리는 자유는 각각 다른 길이지만 모두 하나님 안에서 의미가 있습니다. 이러한 말씀은 결혼이나 독신 여부에 상관없이 모든 이에게 사랑과 격려의 메시지를 전달하며, 삶의 선택에 대한 두려움을 덜어줍니다. 우리는 각자의 삶의 여정에서 하나님과의 관계를 우선시하며, 그분의 인도하심을 신뢰해야 합니다. 하나님, 우리의 선택이 당신의 뜻 안에서 이루어지기를 원합니다. 저희가 어떤 삶의 길을 걷든지, 당신의 사랑과 은혜로 충만하게 하시고, 서로를 이해하며 지지하는 공동체로 살아가게 하소서. 아멘.", "6-19": "고린도전서 7장 10절부터 24절 말씀은 바울이 결혼과 이혼에 대한 신학적 원리를 제시하며, 그리스도인들이 처한 다양한 상황에서 어떻게 하나님을 섬길 수 있는지를 가르치고 있습니다. 당시 고린도 교회는 이혼과 재혼에 대한 혼란이 가득했으며, 바울은 그리스도인의 정체성을 강조하며 어떤 상황에서도 하나님의 부르심을 잊지 말 것을 권면하고 있습니다. 현대 사회에서도 결혼의 가치와 이혼에 대한 고민은 여전히 존재하며, 우리는 이러한 말씀을 통해 우리가 처한 환경 속에서도 하나님의 뜻을 찾고 실천해야 함을 배웁니다. 바울은 결혼 생활을 유지하든, 혼자 있든, 하나님을 기쁘시게 하는 삶이 가장 중요하다고 일깨워 줍니다. 이 말씀은 또한 우리에게 각자의 상황 속에서 하나님의 사랑과 인도하심을 경험할 수 있는 위로를 줍니다. 하나님은 결혼의 연합 속에서도, 혼자 있는 삶 속에서도 우리와 함께하시며, 우리가 그분의 부르심에 충실할 때 그분의 계획이 이루어짐을 믿게 하십니다. 그러므로 우리는 각자의 자리에서 하나님께서 주신 소명을 따라 살아가며, 주님께서 주시는 평안을 누리는 것이 중요합니다. 주님, 저희가 어떤 상황에 있든지 당신의 뜻을 따르며 사랑으로 살아가게 하소서. 우리의 마음을 당신께 향하게 하시고, 우리를 통해 당신의 영광이 드러나게 하옵소서. 아멘.", "6-20": "고린도전서 7장 25절부터 40절까지의 말씀은 바울이 결혼과 독신에 대해 신도들에게 주는 지혜를 담고 있습니다. 당시 고린도 교회는 사회적, 문화적 혼란 속에서 살아가고 있었고, 이로 인해 신앙인들은 삶의 방식에 대해 혼란스러워 했습니다. 바울은 독신을 선택하는 것이 더 나은 선택일 수 있다고 강조하면서도, 결혼 또한 하나님의 뜻 안에서 아름다운 관계임을 잊지 말라고 권면합니다. 현대 사회에서도 우리는 개인의 선택에 대해 많은 압박을 느끼고, 결혼과 독신에 대한 가치관이 다양해지고 있습니다. 이러한 가운데, 바울의 메시지는 우리가 어떤 상황에 있든지 하나님과의 관계를 우선시하며 그분의 뜻을 따르는 것이 중요하다는 점을 일깨워 줍니다. 특히, 결혼이나 독신의 선택이 우리의 삶을 어떻게 변화시키는지를 깊이 고민해 보아야 합니다. 하나님은 각자의 삶의 여정 속에서 위로와 평화를 주시며, 그분의 계획이 항상 선하다는 것을 믿고 나아가게 하십니다. 주님, 오늘도 저희가 선택하는 모든 것이 당신의 뜻 안에서 이루어지기를 기도합니다. 저희의 마음을 열어 주시고, 어떤 상황에서도 당신의 사랑을 경험하게 해 주세요. 아멘.", "6-21": "고린도전서 8장 1절부터 13절은 우상에게 바쳐진 음식과 신앙의 자유에 대한 논의를 다루고 있습니다. 당시 고린도 교회는 이방 문화가 만연한 사회 속에서, 우상 숭배와 관련된 문제들로 혼란스러워했습니다. 바울은 지식이 사람을 교만하게 만들 수 있지만, 사랑이 교회를 세운다는 중요한 진리를 강조합니다. 우리는 믿음의 자유를 누릴 수 있지만, 그것이 다른 이를 상처 입히는 도구가 되어서는 안 됩니다. 오늘날에도 우리는 개인의 신앙과 양심에 따라 행동할 수 있는 자유가 있지만, 타인의 신앙과 약점을 배려해야 하는 책임이 있습니다. 이 말씀은 우리에게 서로를 존중하고 사랑으로 세워가라는 깊은 교훈을 줍니다. 누군가의 믿음이 약해지지 않도록 배려하는 것이 진정한 사랑의 표현임을 기억해야 합니다. 하나님, 저희가 서로를 배려하고 사랑하며, 지식보다 더 큰 사랑을 선택할 수 있도록 도와주소서. 우리의 말과 행동이 주님의 사랑을 반영하기를 기도합니다. 아멘.", "6-22": "고린도전서 9장 1절에서 12절까지의 말씀은 바울이 자신의 사도직에 대한 권리와 그 권리를 포기하는 이유에 대해 설명하는 부분입니다. 바울은 자신이 예수 그리스도의 사도로서 권리가 있지만, 복음을 전하는 일에 방해가 되지 않기 위해 이러한 권리를 자발적으로 포기합니다. 당시 고린도 교회는 다양한 배경을 가진 사람들로 이루어져 있었고, 바울은 그들 가운데서 복음의 진리를 전하는 데 주력했습니다. 현대의 우리도 각자의 자리에서 복음을 전하기 위해 자아를 내려놓고, 서로를 섬기는 자세를 가져야 합니다. 이 말씀은 우리에게 자신을 희생하며 진정한 사랑을 실천하는 삶의 중요성을 일깨워 줍니다. 때로는 나의 권리보다 공동체의 유익과 하나님 나라의 확장을 우선시하는 것이 필요합니다. 힘든 상황 속에서도, 하나님께서는 우리의 희생이 결코 헛되지 않으실 것임을 약속하십니다. 주님, 우리가 서로를 위해 자신을 내려놓을 수 있는 용기를 주시고, 복음의 진리를 전하는 데 최선을 다하게 하옵소서. 아멘.", "6-23": "고린도전서 9장 1절에서 12절까지의 말씀은 바울이 자신의 사도직에 대한 권리와 그 권리를 포기하는 이유에 대해 설명하는 부분입니다. 바울은 자신이 예수 그리스도의 사도로서 권리가 있지만, 복음을 전하는 일에 방해가 되지 않기 위해 이러한 권리를 자발적으로 포기합니다. 당시 고린도 교회는 다양한 배경을 가진 사람들로 이루어져 있었고, 바울은 그들 가운데서 복음의 진리를 전하는 데 주력했습니다. 현대의 우리도 각자의 자리에서 복음을 전하기 위해 자아를 내려놓고, 서로를 섬기는 자세를 가져야 합니다. 이 말씀은 우리에게 자신을 희생하며 진정한 사랑을 실천하는 삶의 중요성을 일깨워 줍니다. 때로는 나의 권리보다 공동체의 유익과 하나님 나라의 확장을 우선시하는 것이 필요합니다. 힘든 상황 속에서도, 하나님께서는 우리의 희생이 결코 헛되지 않으실 것임을 약속하십니다. 주님, 우리가 서로를 위해 자신을 내려놓을 수 있는 용기를 주시고, 복음의 진리를 전하는 데 최선을 다하게 하옵소서. 아멘.", "6-24": "고린도전서 9장 13절에서 27절은 바울이 복음 전파의 사명과 그에 따른 헌신을 강조하는 말씀입니다. 당시 고린도 교회는 다양한 문화와 신앙이 얽혀 있었고, 바울은 복음의 진리를 수호하기 위해 겸손하게 자신의 권리를 포기하는 모습을 보였습니다. 그는 복음을 위해 모든 것에 맞추어 가는 유연함을 보여 주며, 그리스도의 사랑이 무엇인지 실천으로 나타냅니다. 현대의 우리도 각자의 삶 속에서 복음을 전하는 책임을 지니고 있으며, 때로는 나의 권리를 내려놓고 다른 이들의 유익을 위해 헌신해야 할 때가 있습니다. 고난과 희생이 동반되는 이 길이 험난할지라도, 하나님께서는 우리를 통해 영광을 받으시고, 우리의 수고를 결코 헛되지 않게 하신다는 위로의 말씀을 기억해야 합니다. 우리는 모두 그리스도의 경주를 함께 뛰고 있으며, 서로에게 격려와 사랑을 나누는 공동체가 되어야 합니다. 기도할 때, 주님께서 매일의 삶에서 어떻게 복음을 전할 수 있을지를 묵상하게 하시고, 그 길에서 흔들리지 않는 믿음을 주시기를 간구합니다. 주님의 인도하심을 따라 오늘도 그리스도의 사랑을 전하는 일에 힘쓰게 하소서.", "6-25": "고린도전서 10장 1절에서 13절은 이스라엘 백성이 광야에서 겪은 경험을 통해 우리에게 중요한 교훈을 줍니다. 바울은 그들의 불순종과 시험을 언급하면서, 우리도 그들과 같은 시험에 처할 수 있음을 경고합니다. 역사적으로 이스라엘은 하나님의 은혜를 경험했음에도 불구하고 불신과 불만으로 인해 많은 어려움을 겪었습니다. 이는 오늘날에도 여전히 유효한 메시지로, 우리의 신앙 여정에서 겪는 유혹과 시험은 결코 새로운 것이 아닙니다. 현대 사회에서도 우리는 여러 가지 도전과 유혹에 직면하지만, 하나님은 항상 우리에게 출구를 제공하신다는 약속을 기억해야 합니다. 이러한 위로는 우리로 하여금 믿음을 지키고, 어려운 상황 속에서도 하나님을 의지하게 만듭니다. 그러므로 우리는 시험을 만날 때마다 하나님께서 우리와 함께 하시며, 결코 우리를 외면하지 않으신다는 사실을 확신해야 합니다. 주님, 우리에게 힘과 지혜를 주셔서 어려운 순간에도 끝까지 믿음을 지키게 하소서. 아멘.", "6-26": "고전 10:14-33에서는 신앙 공동체가 우상 숭배와 일상적인 삶에서 어떻게 하나님을 기쁘시게 할 수 있는지를 다루고 있습니다. 바울은 그리스도인들이 우상의 제사와 관련된 음식 문제에 대해 분별력을 가져야 하며, 다른 이들의 믿음을 고려하여 행동해야 한다고 강조합니다. 이 말씀은 1세기 그리스에서 우상 숭배가 일상적이었던 역사적 배경을 반영하고 있으며, 당시의 성도들에게는 신앙의 정체성과 공동체의 건강을 지키는 것이 얼마나 중요한지를 일깨워 줍니다. 현대 사회에서도 우리는 다양한 가치관과 신념이 충돌하는 가운데 살고 있습니다. 따라서 우리의 선택이 다른 사람에게 미치는 영향을 생각하며 신중하게 행동해야 함을 잊지 말아야 합니다. 하나님은 우리가 그분을 위해 살아가기를 원하시며, 그 길에서 우리의 약함과 유혹을 이해하십니다. 이러한 말씀을 통해 위로와 격려를 받을 수 있으며, 우리의 삶이 하나님께 영광이 되기를 기도합니다. 사랑하는 하나님, 우리의 선택이 언제나 당신을 기쁘시게 하고, 우리 주변의 사람들에게도 긍정적인 영향을 미치게 하소서. Amen.", "6-27": "고린도전서 11장 1절부터 16절은 바울이 당시 교회 내에서의 남녀의 역할과 경건한 예배의 중요성을 강조하는 말씀입니다. 당시 고린도는 다양한 문화와 사상이 얽혀 있는 도시로, 교회 내에서도 혼란이 많았습니다. 바울은 남녀의 구별을 통해 하나님의 창조 질서를 다시 한번 일깨우고, 경건한 모습으로 서로 존중하며 예배하길 권면하고 있습니다. 이러한 말씀은 오늘날 우리에게도 여전히 유효합니다. 현대 사회에서 성 역할에 대한 논의가 활발하긴 하지만, 우리는 여전히 하나님의 뜻에 따라 서로를 존중하고 사랑해야 합니다. 각자의 위치에서 하나님께 영광을 돌리며 살아가는 것이 중요합니다. 삶의 여러 갈등 속에서도 우리는 하나님의 뜻을 찾고, 서로를 격려하며 믿음의 공동체를 이루어 가야 합니다. 하나님께서 주신 질서와 사랑 속에서 우리는 참된 평안을 경험할 수 있습니다. 주님, 우리가 당신의 말씀을 따라 서로를 존중하고 사랑하며 살아가게 하소서. 아멘.", "6-28": "고린도전서 11장 17절에서 34절의 말씀은 초대 교회에서의 성만찬에 대한 바울의 교훈을 담고 있습니다. 당시 고린도 교회는 분열과 불화가 심각했으며, 이는 성만찬의 의미를 왜곡하게 만들었습니다. 성만찬은 단순한 식사가 아니라, 그리스도의 몸과 피를 기념하며 공동체의 일치를 이루는 신성한 의식입니다. 이러한 배경 속에서 바울은 성만찬에 참여하기 전 자신을 돌아보고, 형제자매와의 관계를 점검할 것을 강조합니다. 현대 사회에서도 우리는 개인의 이익을 우선시하는 경향으로 인해 공동체의 연합을 해치는 경우가 많습니다. 이 말씀은 우리에게 서로를 존중하고, 사랑으로 감싸주며, 그리스도의 희생을 기억하라는 부름으로 다가옵니다. 고난 중에서도 서로를 위로하며, 사랑의 공동체를 이루도록 노력합시다. 주님, 우리의 마음을 정결하게 하시고, 서로를 사랑하고 이해하는 신앙 공동체가 되도록 인도해 주옵소서. 아멘.", "6-29": "고린도전서 12장 1절에서 11절은 성령의 은사에 대한 교훈을 담고 있습니다. 바울은 고린도 교회의 성도들에게 다양한 은사가 주어졌음을 강조하며, 각 개인이 교회의 유익을 위해 그 은사를 사용하는 것이 얼마나 중요한지를 일깨웁니다. 당시 고린도 교회는 분열과 혼란 속에 있었고, 사람들은 특정한 은사를 자랑하며 교만해지는 경향이 있었습니다. 이 말씀은 우리가 각자의 은사를 통해 서로를 섬기고, 하나의 몸인 교회를 세우는 데 초점을 맞춰야 함을 상기시킵니다. 현대의 우리도 각자의 직장, 가정, 교회에서 하나님이 주신 특별한 은사를 통해 서로를 격려하고 사랑으로 섬길 수 있습니다. 어떤 은사를 가진 사람도 소중하며, 모든 은사는 성령의 역사로 주어진 것입니다. 이 말씀은 우리의 존재가 단순히 개인적 성취에 그치지 않고, 서로 연결되어 한 몸을 이루도록 부름받았음을 깨닫게 합니다. 삶의 여러 자리에서 우리가 받은 은사를 통해 하나님의 뜻을 이루어가는 믿음의 공동체가 되기를 소망합니다. 주님, 저희가 받은 은사를 깨닫고 서로를 섬기며 당신의 사랑을 전할 수 있도록 도와주옵소서. 아멘.", "6-30": "고린도전서 12장 1절에서 11절은 성령의 은사에 대한 교훈을 담고 있습니다. 바울은 고린도 교회의 성도들에게 다양한 은사가 주어졌음을 강조하며, 각 개인이 교회의 유익을 위해 그 은사를 사용하는 것이 얼마나 중요한지를 일깨웁니다. 당시 고린도 교회는 분열과 혼란 속에 있었고, 사람들은 특정한 은사를 자랑하며 교만해지는 경향이 있었습니다. 이 말씀은 우리가 각자의 은사를 통해 서로를 섬기고, 하나의 몸인 교회를 세우는 데 초점을 맞춰야 함을 상기시킵니다. 현대의 우리도 각자의 직장, 가정, 교회에서 하나님이 주신 특별한 은사를 통해 서로를 격려하고 사랑으로 섬길 수 있습니다. 어떤 은사를 가진 사람도 소중하며, 모든 은사는 성령의 역사로 주어진 것입니다. 이 말씀은 우리의 존재가 단순히 개인적 성취에 그치지 않고, 서로 연결되어 한 몸을 이루도록 부름받았음을 깨닫게 합니다. 삶의 여러 자리에서 우리가 받은 은사를 통해 하나님의 뜻을 이루어가는 믿음의 공동체가 되기를 소망합니다. 주님, 저희가 받은 은사를 깨닫고 서로를 섬기며 당신의 사랑을 전할 수 있도록 도와주옵소서. 아멘."};
+
+function fetchClaudeMeditation() {
+  const month = new Date().getMonth()+1;
+  const day = new Date().getDate();
+  const key = month+'-'+day;
+  claudeMeditation = PRE_MEDITATIONS[key] || '';
+  if (!claudeMeditation && bibleText) claudeMeditation = generateMeditation(chapter, bibleText);
+}
+
 async function startPrayer(){
   currentStep=0;
   chapter=getChapter();
-  // Show loading on home page button
   const btn=document.querySelector('#home-start .btn-primary');
-  if(btn){btn.textContent='말씀 불러오는 중...';btn.disabled=true;}
-  // Fetch bible first
+  if(btn){btn.textContent='📖 말씀 로딩 중...';btn.disabled=true;}
   await fetchBible();
-  // Now show prayer page
-  if(btn){btn.textContent='기도 🙏';btn.disabled=false;}
+  fetchClaudeMeditation(); // 즉시 반환 (사전 생성된 묵상)
+  if(btn){btn.textContent='기도 시작';btn.disabled=false;}
   showPage('prayer');
-  document.getElementById('prayer-chapter-label').textContent=chapter.ko+' '+chapter.ch+'장';
+  const versesLabel=chapter.verses?chapter.ch+':'+chapter.verses:chapter.ch+'장';
+  document.getElementById('prayer-chapter-label').textContent=chapter.ko+' '+versesLabel;
   renderStep();
 }
 
@@ -381,26 +857,26 @@ async function fetchBible(){
     }catch{}
     if(!bibleText)bibleText=chapter.ko+' '+chapter.ch+'장의 말씀을 묵상하세요.\n\n성경책을 펴고 읽어주세요.';
   } else {
-    // Split chapter into sections of ~SECTION_SIZE verses
-    const totalV=allVerses.length;
-    if(totalV<=SECTION_SIZE){
-      // Short chapter — show all
-      bibleText=allVerses.map(v=>v.verse+'. '+v.text).join('\n');
-      sectionLabel='1-'+totalV+'절 (전체)';
+    // 절 범위가 지정되어 있으면 해당 절만 표시
+    if (chapter.verses) {
+      const vm = chapter.verses.match(/(\d+)-(\d+)/);
+      if (vm) {
+        const vStart = parseInt(vm[1]), vEnd = parseInt(vm[2]);
+        const filtered = allVerses.filter(v => v.verse >= vStart && v.verse <= vEnd);
+        if (filtered.length > 0) {
+          bibleText = filtered.map(v => v.verse + '. ' + v.text).join('\n');
+          sectionLabel = vStart + '~' + vEnd + '절';
+        } else {
+          bibleText = allVerses.map(v => v.verse + '. ' + v.text).join('\n');
+          sectionLabel = '전체 ' + allVerses.length + '절';
+        }
+      } else {
+        bibleText = allVerses.map(v => v.verse + '. ' + v.text).join('\n');
+        sectionLabel = '전체 ' + allVerses.length + '절';
+      }
     } else {
-      // Split into sections
-      const numSections=Math.ceil(totalV/SECTION_SIZE);
-      // Which section for today? Use day count within this chapter
-      const dayIndex=lsGet('section-'+chapter.en+'-'+chapter.ch);
-      let secIdx=dayIndex?parseInt(dayIndex):0;
-      if(isNaN(secIdx)||secIdx>=numSections)secIdx=0;
-      const start=secIdx*SECTION_SIZE;
-      const end=Math.min(start+SECTION_SIZE,totalV);
-      const section=allVerses.slice(start,end);
-      bibleText=section.map(v=>v.verse+'. '+v.text).join('\n');
-      sectionLabel=(start+1)+'-'+end+'절 ('+numSections+'부분 중 '+(secIdx+1)+'번째)';
-      // Next time show next section
-      lsSet('section-'+chapter.en+'-'+chapter.ch,String((secIdx+1)%numSections));
+      bibleText = allVerses.map(v => v.verse + '. ' + v.text).join('\n');
+      sectionLabel = '전체 ' + allVerses.length + '절';
     }
   }
   if(currentStep===0)renderStep();
@@ -431,14 +907,14 @@ function renderStep(){
   if(currentStep===0){
     label.textContent='1. 묵상';
     const txt=bibleText||'말씀을 불러오지 못했습니다. 새로고침 해주세요.';
-    const summary=bibleText ? generateMeditation(chapter, bibleText) : chapter.ko+' '+chapter.ch+'장을 천천히 읽고 하나님의 음성에 귀 기울여 보세요.';
+    const localSummary = claudeMeditation || (bibleText ? generateMeditation(chapter, bibleText) : chapter.ko+' '+chapter.ch+'장을 천천히 읽고 하나님의 음성에 귀 기울여 보세요.');
     const memo=lsGet('memo-'+t+'-0')||'';
     content.innerHTML=`
       <div class="step-icon">📖</div>
       <div class="step-title">1. 묵상</div>
-      <p class="subtitle" style="margin:4px 0 0">${chapter.ko} ${chapter.ch}장 ${sectionLabel?'('+sectionLabel+')':''}</p>
+      <p class="subtitle" style="margin:4px 0 0">${chapter.ko} ${chapter.verses ? chapter.ch+':'+chapter.verses : chapter.ch+'장'}</p>
       <div class="bible-box">${txt.replace(/\n/g,'<br>')}</div>
-      <div class="summary-box"><div class="label">✝️ 묵상 가이드</div><div style="font-size:13px;color:#374151;line-height:1.8">${summary}</div></div>
+      <div class="summary-box"><div class="label">✝️ 묵상 가이드</div><div id="summaryContent" style="font-size:13px;color:#374151;line-height:1.8">${localSummary.replace(/\n/g,'<br>')}</div></div>
       <textarea class="memo" placeholder="말씀을 통해 느낀 점을 적어보세요..." oninput="saveMemo(0,this.value)">${memo}</textarea>`;
   }else{
     const s=STEPS[currentStep-1];
@@ -458,9 +934,31 @@ function saveMemo(id,val){lsSet('memo-'+today()+'-'+id,val)}
 function nextStep(){if(currentStep<STEPS.length){currentStep++;renderStep();window.scrollTo(0,0)}}
 function prevStep(){if(currentStep>0){currentStep--;renderStep();window.scrollTo(0,0)}}
 
+// Confetti celebration
+function showConfetti(){
+  const container = document.createElement('div');
+  container.className = 'confetti-container';
+  document.body.appendChild(container);
+  const colors = ['#b8860b','#daa520','#059669','#34d399','#f59e0b','#fbbf24','#e8dcc8'];
+  for(let i=0;i<40;i++){
+    const c = document.createElement('div');
+    c.className = 'confetti';
+    c.style.left = Math.random()*100+'%';
+    c.style.top = '-10px';
+    c.style.backgroundColor = colors[Math.floor(Math.random()*colors.length)];
+    c.style.width = (6+Math.random()*8)+'px';
+    c.style.height = (6+Math.random()*8)+'px';
+    c.style.animationDelay = Math.random()*2+'s';
+    c.style.animationDuration = (2+Math.random()*2)+'s';
+    container.appendChild(c);
+  }
+  setTimeout(()=>container.remove(),5000);
+}
+
 function completePrayer(){
   markDone();
   showPage('complete');
+  showConfetti();
   const m=MSGS[new Date().getDate()%MSGS.length];
   const h=getHistory();
   document.getElementById('comp-emoji').textContent=m.e;
@@ -473,16 +971,16 @@ function completePrayer(){
   // Show collected memos
   const t=today();
   const allSteps=[{id:0,title:'묵상',icon:'📖'},...STEPS.map((s,i)=>({id:s.id,title:s.title,icon:s.icon}))];
-  let memosHtml='<div style="font-size:14px;font-weight:600;margin-bottom:10px">📝 오늘의 기도 기록</div>';
+  let memosHtml='<div style="font-size:14px;font-weight:600;margin-bottom:10px;color:#2d2a24">📝 오늘의 기도 기록</div>';
   let hasMemo=false;
   allSteps.forEach((s,i)=>{
     const memo=lsGet('memo-'+t+'-'+s.id)||'';
     if(memo.trim()){
       hasMemo=true;
-      memosHtml+=`<div style="margin-bottom:10px"><div style="font-size:12px;color:#6d28d9;font-weight:600;margin-bottom:3px">${s.icon} ${i+1}. ${s.title}</div><div style="font-size:13px;color:#374151;line-height:1.6">${memo.replace(/\n/g,'<br>')}</div></div>`;
+      memosHtml+=`<div style="margin-bottom:10px"><div style="font-size:12px;color:#b8860b;font-weight:600;margin-bottom:3px">${s.icon} ${i+1}. ${s.title}</div><div style="font-size:13px;color:#374151;line-height:1.6">${memo.replace(/\n/g,'<br>')}</div></div>`;
     }
   });
-  if(!hasMemo) memosHtml+='<div style="font-size:13px;color:#9ca3af">기록된 메모가 없습니다.</div>';
+  if(!hasMemo) memosHtml+='<div style="font-size:13px;color:#8b7759">기록된 메모가 없습니다.</div>';
   document.getElementById('comp-memos').innerHTML=memosHtml;
 }
 
@@ -513,24 +1011,24 @@ function downloadMemoImage(){
 
   canvas.width=W; canvas.height=Math.max(H,400);
   // Background
-  ctx.fillStyle='#faf5ff'; ctx.fillRect(0,0,W,canvas.height);
+  ctx.fillStyle='#faf7f2'; ctx.fillRect(0,0,W,canvas.height);
 
   // Header
   let y=pad+10;
-  ctx.fillStyle='#6d28d9'; ctx.font='bold 22px -apple-system,system-ui,sans-serif';
+  ctx.fillStyle='#b8860b'; ctx.font='bold 22px -apple-system,system-ui,sans-serif';
   ctx.fillText('🙏 QT 7분법 기도',pad,y); y+=30;
   ctx.fillStyle='#6b7280'; ctx.font='14px -apple-system,system-ui,sans-serif';
   const dateStr=t.replace(/-/g,'.');
   ctx.fillText((uname?uname+'님의 ':'')+'기도 기록 — '+dateStr+' | '+chapter.ko+' '+chapter.ch+'장',pad,y);
   y+=10;
   // Line
-  ctx.strokeStyle='#e4e4e7'; ctx.lineWidth=1;
+  ctx.strokeStyle='#e8dcc8'; ctx.lineWidth=1;
   ctx.beginPath(); ctx.moveTo(pad,y+8); ctx.lineTo(W-pad,y+8); ctx.stroke();
   y+=24;
 
   // Entries
   entries.forEach(e=>{
-    ctx.fillStyle='#6d28d9'; ctx.font='bold 15px -apple-system,system-ui,sans-serif';
+    ctx.fillStyle='#b8860b'; ctx.font='bold 15px -apple-system,system-ui,sans-serif';
     ctx.fillText(e.icon+' '+e.num+'. '+e.title,pad,y); y+=22;
 
     ctx.fillStyle='#374151'; ctx.font='14px -apple-system,system-ui,sans-serif';
@@ -552,13 +1050,13 @@ function downloadMemoImage(){
   });
 
   if(entries.length===0){
-    ctx.fillStyle='#9ca3af'; ctx.font='14px -apple-system,system-ui,sans-serif';
+    ctx.fillStyle='#8b7759'; ctx.font='14px -apple-system,system-ui,sans-serif';
     ctx.fillText('기록된 메모가 없습니다.',pad,y);
   }
 
   // Footer
   y=canvas.height-pad;
-  ctx.fillStyle='#9ca3af'; ctx.font='11px -apple-system,system-ui,sans-serif';
+  ctx.fillStyle='#8b7759'; ctx.font='11px -apple-system,system-ui,sans-serif';
   ctx.fillText('QT 7분법 기도 앱 — gooddoo84.github.io/qt-prayer',pad,y);
 
   // Download
