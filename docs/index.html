@@ -75,6 +75,12 @@ body::after { bottom:60px; left:-40px; animation: floatDeco 15s ease-in-out infi
   0%{transform:translateY(-100%) rotate(0deg);opacity:1}
   100%{transform:translateY(100vh) rotate(720deg);opacity:0}
 }
+@keyframes starFall{
+  0%{transform:translateY(-10px);opacity:0}
+  10%{opacity:1}
+  90%{opacity:.6}
+  100%{transform:translateY(105vh);opacity:0}
+}
 @keyframes celebratePulse{
   0%,100%{transform:scale(1)}
   25%{transform:scale(1.1)}
@@ -392,8 +398,10 @@ h1{
 <div class="container">
 
 <!-- HOME PAGE -->
-<div id="page-home" class="page active">
-  <div style="flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center">
+<div id="page-home" class="page active" style="position:relative;overflow:hidden">
+  <!-- 별빛 파티클 -->
+  <div id="stars-container" style="position:absolute;top:0;left:0;right:0;bottom:0;pointer-events:none;overflow:hidden;z-index:0"></div>
+  <div style="flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;position:relative;z-index:1">
     <div style="font-size:64px;margin-bottom:12px;animation:float 3s ease-in-out infinite;filter:drop-shadow(0 4px 16px rgba(184,134,11,.2))">✝️</div>
     <h1 style="font-size:32px;margin-bottom:4px">QT 7분법 기도</h1>
     <p class="subtitle" style="font-size:15px;margin-bottom:24px">매일 말씀과 함께하는 기도</p>
@@ -816,6 +824,17 @@ function goHome(){
   // Restore saved name
   const savedName=lsGet('username');
   if(savedName) document.getElementById('user-name').value=savedName;
+
+  // 별빛 파티클 생성
+  const sc=document.getElementById('stars-container');
+  if(sc && sc.children.length===0){
+    for(let i=0;i<25;i++){
+      const s=document.createElement('div');
+      const size=Math.random()*3+1;
+      s.style.cssText='position:absolute;border-radius:50%;background:rgba(218,165,32,'+(Math.random()*0.4+0.2)+');width:'+size+'px;height:'+size+'px;left:'+Math.random()*100+'%;top:-5%;animation:starFall '+(Math.random()*6+4)+'s linear '+(Math.random()*8)+'s infinite;';
+      sc.appendChild(s);
+    }
+  }
 }
 
 function getUserName(){
