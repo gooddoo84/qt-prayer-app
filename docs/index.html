@@ -393,27 +393,38 @@ h1{
 
 <!-- HOME PAGE -->
 <div id="page-home" class="page active">
-  <div class="home-icon">📖</div>
-  <h1>QT 7분법 기도</h1>
-  <p class="subtitle">매일 말씀과 함께하는 기도</p>
-  <p class="streak" id="home-streak" style="display:none"></p>
-  <div class="card">
-    <div class="card-label">오늘의 말씀</div>
-    <div class="card-title" id="home-chapter"></div>
-    <div class="card-sub" id="home-book-progress"></div>
-    <div class="progress-bar" style="margin-top:16px;display:none"><div class="progress-fill" id="home-progress-bar" style="width:0%"></div></div>
-    <div class="progress-label" style="display:none"><span id="home-total-progress"></span><span></span></div>
+  <div style="flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center">
+    <div style="font-size:64px;margin-bottom:12px;animation:float 3s ease-in-out infinite;filter:drop-shadow(0 4px 16px rgba(184,134,11,.2))">✝️</div>
+    <h1 style="font-size:32px;margin-bottom:4px">QT 7분법 기도</h1>
+    <p class="subtitle" style="font-size:15px;margin-bottom:24px">매일 말씀과 함께하는 기도</p>
+
+    <div style="background:linear-gradient(135deg,rgba(184,134,11,.08),rgba(218,165,32,.12));border:1px solid rgba(184,134,11,.2);border-radius:16px;padding:20px 28px;margin-bottom:28px;width:100%">
+      <div id="home-date" style="font-family:'Noto Serif KR',Georgia,serif;font-size:20px;font-weight:700;color:#2d2a24;margin-bottom:4px"></div>
+      <div style="font-size:13px;color:#8b7759;letter-spacing:1px" id="home-day-label"></div>
+    </div>
+
+    <div style="width:100%;margin-bottom:8px">
+      <div class="card" style="margin:0">
+        <div class="card-label">✦ QUIET TIME</div>
+        <div class="card-title" id="home-chapter" style="display:none"></div>
+        <div class="card-sub" id="home-book-progress" style="display:none"></div>
+        <div class="progress-bar" style="display:none"><div class="progress-fill" id="home-progress-bar" style="width:0%"></div></div>
+        <div class="progress-label" style="display:none"><span id="home-total-progress"></span><span></span></div>
+        <p style="font-size:14px;color:#5a5347;line-height:1.7;margin-top:8px">오늘도 하나님과 함께하는<br>은혜로운 시간을 시작하세요</p>
+      </div>
+    </div>
   </div>
-  <div id="home-start">
+
+  <div id="home-start" style="padding-bottom:20px">
     <input type="hidden" id="user-name" value="">
-    <button class="btn-primary" onclick="startPrayer()">기도 시작</button>
+    <button class="btn-primary" onclick="startPrayer()" style="font-size:18px;padding:18px">✝️ 기도 시작</button>
   </div>
   <div id="home-done" class="done-check" style="display:none">
     <div class="big">✅</div>
     <p>오늘의 기도를 완료했어요!</p>
     <a href="#" onclick="startPrayer();return false" style="color:#b8860b;font-size:14px;font-weight:500">다시 보기</a>
   </div>
-  <p class="footer">매일 1장씩, 성경 전체를 함께 읽어요</p>
+  <p class="streak" id="home-streak" style="display:none"></p>
 </div>
 
 <!-- PRAYER PAGE -->
@@ -793,11 +804,11 @@ function goHome(){
   showPage('home');
   chapter=getChapter();
   const h=getHistory();
-  // 표지에는 구절 표시 안 함
-  document.getElementById('home-chapter').textContent='오늘의 묵상';
-  document.getElementById('home-book-progress').textContent='';
-  document.getElementById('home-total-progress').textContent='';
-  document.getElementById('home-progress-bar').style.width=((chapter.gi+1)/TOTAL*100)+'%';
+  // 오늘 날짜 표시
+  const now = new Date();
+  const days = ['일요일','월요일','화요일','수요일','목요일','금요일','토요일'];
+  document.getElementById('home-date').textContent = now.getFullYear()+'년 '+(now.getMonth()+1)+'월 '+now.getDate()+'일';
+  document.getElementById('home-day-label').textContent = days[now.getDay()];
   
   // Always show start button
   document.getElementById('home-start').style.display='block';
